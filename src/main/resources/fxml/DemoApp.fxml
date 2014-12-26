@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.sothawo.mapjfx.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sothawo.mapjfx.demo.Controller">
+   <top>
+      <HBox fx:id="topControls" alignment="CENTER" disable="true" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="buttonKaHarbour" mnemonicParsing="false" text="Karlsruhe harbour" />
+            <Button fx:id="buttonKaCastle" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" text="Karlsruhe castle" />
+            <Button fx:id="buttonKaStation" layoutX="83.0" layoutY="15.0" mnemonicParsing="false" text="Karlsruhe station" />
+            <Button fx:id="buttonZoom" mnemonicParsing="false" text="Zoom 14" />
+            <Slider fx:id="sliderZoom" blockIncrement="1.0" majorTickUnit="7.0" max="28.0" minorTickCount="6" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="14.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+         </padding>
+      </HBox>
+   </top>
+   <center>
+      <MapView fx:id="mapView" animationDuration="500.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="labelCenter" text="Center: " />
+            <Label fx:id="labelZoom" text="Zoom: " />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </bottom>
+</BorderPane>
