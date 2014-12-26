@@ -112,7 +112,6 @@ public class Controller {
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
         // add a listener to the animationDuration field and make sure, we only accept int values
-        animationDuration.setText("500");
         animationDuration.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -127,6 +126,7 @@ public class Controller {
                 }
             }
         });
+        animationDuration.setText("500");
 
         // add an observer for the MapView's center property to adjust the corresponding label
         mapView.centerProperty().addListener(new ChangeListener<Coordinate>() {

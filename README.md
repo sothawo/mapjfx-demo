@@ -23,14 +23,31 @@ More Information about the project can be found at [the sothawo website](http://
 
 ## building the program
 
-this project is built using mvn. The library jar is created by running `mvn package`
+this project is built using mvn. The library jar is created by running `mvn package`. This creates as well an
+application directory structure in _target/mapjfx-demo_. You can copy this whole directory to a machine which has
+Java8 installed and start the program by using the scripts found in the _bin_ directory. Or start it on the machine
+where you did the build  using
+
+_(cd target/mapjfx-demo && ./bin/mapjfx-demo)_
+
+or all in one:
+
+_mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 
 ## version history
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
-### 1.1.0-SNAPSHOT
+### 1.1.2-SNAPSHOT
 
 current development version
+
+### 1.1.1
+
+* added configurable options to the left of the window
+
+### 1.1.0
+
+* intial version
 
