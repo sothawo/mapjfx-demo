@@ -20,9 +20,7 @@ import com.sothawo.mapjfx.MapView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import java.util.logging.Logger;
@@ -66,11 +64,24 @@ public class Controller {
     private MapView mapView;
 
     /** the box containing the top controls, must be enabled when mapView is initialized */
-    @FXML private HBox topControls;
+    @FXML
+    private HBox topControls;
 
     /** Slider to change the zoom value */
     @FXML
     private Slider sliderZoom;
+
+    /** Accordion for all the different options */
+    @FXML
+    private Accordion leftControls;
+
+    /** section miscellanous options */
+    @FXML
+    private TitledPane optionsMisc;
+
+    /** for editing the animation duration */
+    @FXML
+    private TextField animationDuration;
 
     /** Label to display the current center */
     @FXML
@@ -86,6 +97,10 @@ public class Controller {
      * called after the fxml is loaded and all objects are created.
      */
     public void initialize() {
+        leftControls.setExpandedPane(optionsMisc);
+
+        // set the controls to disabled, this will be changed when the MapView is intialized
+        setControlsDisable(true);
 
         // wire up the buttons
         buttonKaHarbour.setOnAction(event -> mapView.setCenter(coordKarlsruheHarbour));
@@ -96,8 +111,24 @@ public class Controller {
         // connect the slider to the map's zoom
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
+        // add a listener to the animationDuration field and make sure, we only accept int values
+        animationDuration.setText("500");
+        animationDuration.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.isEmpty()) {
+                    mapView.setAnimationDuration(0);
+                } else {
+                    try {
+                        mapView.setAnimationDuration(Integer.parseInt(newValue));
+                    } catch (NumberFormatException e) {
+                        animationDuration.setText(oldValue);
+                    }
+                }
+            }
+        });
 
-        // add an observer for the map's center property to adjust the corresponding label
+        // add an observer for the MapView's center property to adjust the corresponding label
         mapView.centerProperty().addListener(new ChangeListener<Coordinate>() {
             @Override
             public void changed(ObservableValue<? extends Coordinate> observable, Coordinate oldValue,
@@ -106,7 +137,7 @@ public class Controller {
             }
         });
 
-        // add an observer for the map's zoom property to adjust the corresponding label
+        // add an observer for the MapView's zoom property to adjust the corresponding label
         mapView.zoomProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -114,7 +145,7 @@ public class Controller {
             }
         });
 
-        // wath the mapView's initialized property to finish initialization
+        // watch the MapView's initialized property to finish initialization
         mapView.initializedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -124,7 +155,7 @@ public class Controller {
                     mapView.setCenter(coordKarlsruheHarbour);
                     mapView.setZoom(ZOOM_DEFAULT);
                     // now enable the controls
-                    topControls.setDisable(false);
+                    setControlsDisable(false);
                 }
             }
         });
@@ -132,5 +163,15 @@ public class Controller {
         mapView.initialize();
 
         logger.fine("initialization finished");
+    }
+
+    /**
+     * enables / disables the different controls
+     *
+     * @param flag
+     */
+    private void setControlsDisable(boolean flag) {
+        topControls.setDisable(flag);
+        leftControls.setDisable(flag);
     }
 }
