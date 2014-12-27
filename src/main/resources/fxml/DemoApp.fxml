@@ -1,61 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.sothawo.mapjfx.*?>
-<?import javafx.geometry.*?>
+<?import com.sothawo.mapjfx.MapView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sothawo.mapjfx.demo.Controller">
-   <top>
-      <HBox fx:id="topControls" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="buttonKaHarbour" mnemonicParsing="false" text="Karlsruhe harbour" />
-            <Button fx:id="buttonKaCastle" layoutX="15.0" layoutY="15.0" mnemonicParsing="false" text="Karlsruhe castle" />
-            <Button fx:id="buttonKaStation" layoutX="83.0" layoutY="15.0" mnemonicParsing="false" text="Karlsruhe station" />
-            <Button fx:id="buttonZoom" mnemonicParsing="false" text="Zoom 14" />
-            <Slider fx:id="sliderZoom" blockIncrement="1.0" majorTickUnit="7.0" max="28.0" minorTickCount="6" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="14.0" HBox.hgrow="ALWAYS" />
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-         </padding>
-      </HBox>
-   </top>
-   <center>
-      <MapView fx:id="mapView" BorderPane.alignment="CENTER" />
-   </center>
-   <bottom>
-      <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label fx:id="labelCenter" text="Center: " />
-            <Label fx:id="labelZoom" text="Zoom: " />
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </HBox>
-   </bottom>
-   <left>
-      <Accordion fx:id="leftControls" BorderPane.alignment="CENTER">
-        <panes>
-          <TitledPane fx:id="optionsMisc" animated="false" text="misc">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
-                     <children>
-                        <VBox prefHeight="57.0" spacing="5.0">
-                           <children>
-                              <Label text="animation duration" />
-                              <TextField fx:id="animationDuration" prefWidth="120.0" promptText="milliseconds" />
-                           </children>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.sothawo.mapjfx.demo.Controller">
+    <top>
+        <HBox fx:id="topControls" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="buttonKaHarbour" mnemonicParsing="false" text="Karlsruhe harbour"/>
+                <Button fx:id="buttonKaCastle" layoutX="15.0" layoutY="15.0" mnemonicParsing="false"
+                        text="Karlsruhe castle"/>
+                <Button fx:id="buttonKaStation" layoutX="83.0" layoutY="15.0" mnemonicParsing="false"
+                        text="Karlsruhe station"/>
+                <Button fx:id="buttonZoom" mnemonicParsing="false" text="Zoom 14"/>
+                <Slider fx:id="sliderZoom" blockIncrement="1.0" majorTickUnit="7.0" max="28.0" minorTickCount="6"
+                        showTickLabels="true" showTickMarks="true" snapToTicks="true" value="14.0" HBox.hgrow="ALWAYS"/>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
+            </padding>
+        </HBox>
+    </top>
+    <center>
+        <MapView fx:id="mapView" BorderPane.alignment="CENTER"/>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="labelCenter" text="Center: "/>
+                <Label fx:id="labelZoom" text="Zoom: "/>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </HBox>
+    </bottom>
+    <left>
+        <Accordion fx:id="leftControls" BorderPane.alignment="CENTER">
+            <panes>
+                <TitledPane fx:id="optionsMisc" animated="false" text="misc">
+                    <content>
+                        <VBox prefHeight="57.0" spacing="10.0">
+                            <children>
+                                <Label text="animation duration"/>
+                                <TextField fx:id="animationDuration" prefWidth="120.0" promptText="milliseconds"/>
+                            </children>
                         </VBox>
-                     </children>
-                  </AnchorPane>
-            </content>
-          </TitledPane>
-        </panes>
-      </Accordion>
-   </left>
+                    </content>
+                </TitledPane>
+                <TitledPane animated="false" text="map style">
+                    <content>
+                        <VBox spacing="10.0">
+                            <fx:define>
+                                <ToggleGroup fx:id="mapTypeGroup"/>
+                            </fx:define>
+                            <children>
+                                <RadioButton fx:id="radioMsOSM" mnemonicParsing="false" text="OSM"
+                                             toggleGroup="$mapTypeGroup"/>
+                                <RadioButton fx:id="radioMsMQ" mnemonicParsing="false" text="MapQuest"
+                                             toggleGroup="$mapTypeGroup"/>
+                                <RadioButton fx:id="radioMsStamen" mnemonicParsing="false" text="Stamen"
+                                             toggleGroup="$mapTypeGroup"/>
+                                <RadioButton fx:id="radioMsStamenLabels" mnemonicParsing="false" text="Stamen/Labels"
+                                             toggleGroup="$mapTypeGroup"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </TitledPane>
+            </panes>
+        </Accordion>
+    </left>
 </BorderPane>

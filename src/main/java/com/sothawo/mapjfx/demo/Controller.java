@@ -16,6 +16,7 @@
 package com.sothawo.mapjfx.demo;
 
 import com.sothawo.mapjfx.Coordinate;
+import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +24,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
+import java.text.MessageFormat;
 import java.util.logging.Logger;
 
 /**
@@ -91,6 +93,26 @@ public class Controller {
     @FXML
     private Label labelZoom;
 
+    /** RadioButton for MapStyle OSM */
+    @FXML
+    private RadioButton radioMsOSM;
+
+    /** RadioButton for MapStyle MapQuest */
+    @FXML
+    private RadioButton radioMsMQ;
+
+    /** RadioButton for MapStyle Stamen */
+    @FXML
+    private RadioButton radioMsStamen;
+
+    /** RadioButton for MapStyle Stamen/Labels */
+    @FXML
+    private RadioButton radioMsStamenLabels;
+
+    /** ToggleGroup for the MapStyle radios */
+    @FXML
+    private ToggleGroup mapTypeGroup;
+
 // -------------------------- OTHER METHODS --------------------------
 
     /**
@@ -154,11 +176,32 @@ public class Controller {
                     // start at the harbour with default zoom
                     mapView.setCenter(coordKarlsruheHarbour);
                     mapView.setZoom(ZOOM_DEFAULT);
+                    mapView.setMapType(MapType.OSM);
                     // now enable the controls
                     setControlsDisable(false);
                 }
             }
         });
+
+        // the different RadioButtons
+        mapTypeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                logger.fine(() -> MessageFormat.format("map type toggled to {0}", newValue.toString()));
+                MapType mapType = MapType.OSM;
+                if (newValue == radioMsOSM) {
+                    mapType = MapType.OSM;
+                } else if (newValue == radioMsMQ) {
+                    mapType = MapType.MAPQUEST_OSM;
+                } else if (newValue == radioMsStamen) {
+                    mapType = MapType.STAMEN;
+                } else if (newValue == radioMsStamenLabels) {
+                    mapType = MapType.STAMEN_LABELS;
+                }
+                mapView.setMapType(mapType);
+            }
+        });
+        mapTypeGroup.selectToggle(radioMsOSM);
 
         mapView.initialize();
 
