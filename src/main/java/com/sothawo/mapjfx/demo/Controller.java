@@ -82,6 +82,10 @@ public class Controller {
     @FXML
     private TitledPane optionsMisc;
 
+    /** section map type */
+    @FXML
+    private TitledPane optionsMapType;
+
     /** for editing the animation duration */
     @FXML
     private TextField animationDuration;
@@ -102,14 +106,6 @@ public class Controller {
     @FXML
     private RadioButton radioMsMQ;
 
-    /** RadioButton for MapStyle Stamen */
-    @FXML
-    private RadioButton radioMsStamen;
-
-    /** RadioButton for MapStyle Stamen/Labels */
-    @FXML
-    private RadioButton radioMsStamenLabels;
-
     /** ToggleGroup for the MapStyle radios */
     @FXML
     private ToggleGroup mapTypeGroup;
@@ -120,7 +116,7 @@ public class Controller {
      * called after the fxml is loaded and all objects are created.
      */
     public void initialize() {
-        leftControls.setExpandedPane(optionsMisc);
+        leftControls.setExpandedPane(optionsMapType);
 
         // set the controls to disabled, this will be changed when the MapView is intialized
         setControlsDisable(true);
@@ -181,10 +177,6 @@ public class Controller {
                     mapType = MapType.OSM;
                 } else if (newValue == radioMsMQ) {
                     mapType = MapType.MAPQUEST_OSM;
-                } else if (newValue == radioMsStamen) {
-                    mapType = MapType.STAMEN_WATERCOLOR;
-                } else if (newValue == radioMsStamenLabels) {
-                    mapType = MapType.STAMEN_WATERCOLOR_LABELS;
                 }
                 mapView.setMapType(mapType);
             }

@@ -41,17 +41,7 @@
     <left>
         <Accordion fx:id="leftControls" BorderPane.alignment="CENTER">
             <panes>
-                <TitledPane fx:id="optionsMisc" animated="false" text="misc">
-                    <content>
-                        <VBox prefHeight="57.0" spacing="10.0">
-                            <children>
-                                <Label text="animation duration"/>
-                                <TextField fx:id="animationDuration" prefWidth="120.0" promptText="milliseconds"/>
-                            </children>
-                        </VBox>
-                    </content>
-                </TitledPane>
-                <TitledPane animated="false" text="map style">
+                <TitledPane fx:id="optionsMapType" animated="false" text="map style">
                     <content>
                         <VBox spacing="10.0">
                             <fx:define>
@@ -62,10 +52,16 @@
                                              toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsMQ" mnemonicParsing="false" text="MapQuest"
                                              toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsStamen" mnemonicParsing="false" text="Stamen"
-                                             toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsStamenLabels" mnemonicParsing="false" text="Stamen/Labels"
-                                             toggleGroup="$mapTypeGroup"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </TitledPane>
+                <TitledPane fx:id="optionsMisc" animated="false" text="misc">
+                    <content>
+                        <VBox prefHeight="57.0" spacing="10.0">
+                            <children>
+                                <Label text="animation duration"/>
+                                <TextField fx:id="animationDuration" prefWidth="120.0" promptText="milliseconds"/>
                             </children>
                         </VBox>
                     </content>
