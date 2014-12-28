@@ -18,6 +18,7 @@ package com.sothawo.mapjfx.demo;
 import com.sothawo.mapjfx.Coordinate;
 import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -150,22 +151,9 @@ public class Controller {
         });
         animationDuration.setText("500");
 
-        // add an observer for the MapView's center property to adjust the corresponding label
-        mapView.centerProperty().addListener(new ChangeListener<Coordinate>() {
-            @Override
-            public void changed(ObservableValue<? extends Coordinate> observable, Coordinate oldValue,
-                                Coordinate newValue) {
-                labelCenter.setText(newValue == null ? "" : ("center: " + newValue.toString()));
-            }
-        });
-
-        // add an observer for the MapView's zoom property to adjust the corresponding label
-        mapView.zoomProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                labelZoom.setText(null == newValue ? "" : ("zoom: " + newValue.toString()));
-            }
-        });
+        // bind the map's center and zoom properties to the label and format them
+        labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
+        labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));
 
         // watch the MapView's initialized property to finish initialization
         mapView.initializedProperty().addListener(new ChangeListener<Boolean>() {
@@ -174,9 +162,9 @@ public class Controller {
                 if (newValue) {
                     logger.fine("setting center and enabling controls...");
                     // start at the harbour with default zoom
-                    mapView.setCenter(coordKarlsruheHarbour);
                     mapView.setZoom(ZOOM_DEFAULT);
                     mapView.setMapType(MapType.OSM);
+                    mapView.setCenter(coordKarlsruheHarbour);
                     // now enable the controls
                     setControlsDisable(false);
                 }
@@ -194,9 +182,9 @@ public class Controller {
                 } else if (newValue == radioMsMQ) {
                     mapType = MapType.MAPQUEST_OSM;
                 } else if (newValue == radioMsStamen) {
-                    mapType = MapType.STAMEN;
+                    mapType = MapType.STAMEN_WATERCOLOR;
                 } else if (newValue == radioMsStamenLabels) {
-                    mapType = MapType.STAMEN_LABELS;
+                    mapType = MapType.STAMEN_WATERCOLOR_LABELS;
                 }
                 mapView.setMapType(mapType);
             }
