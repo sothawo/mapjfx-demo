@@ -16,6 +16,7 @@
 package com.sothawo.mapjfx.demo;
 
 import com.sothawo.mapjfx.Coordinate;
+import com.sothawo.mapjfx.Extent;
 import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
 import javafx.beans.binding.Bindings;
@@ -43,20 +44,10 @@ public class Controller {
     private static final Coordinate coordKarlsruheCastle = new Coordinate(49.013517, 8.404435);
     private static final Coordinate coordKarlsruheHarbour = new Coordinate(49.015511, 8.323497);
     private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
+    private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
+            coordKarlsruheHarbour, coordKarlsruheStation);
     /** default zoom value */
     private static final int ZOOM_DEFAULT = 14;
-
-    @FXML
-    /** button to set the map's center */
-    private Button buttonKaHarbour;
-
-    @FXML
-    /** button to set the map's center */
-    private Button buttonKaCastle;
-
-    @FXML
-    /** button to set the map's center */
-    private Button buttonKaStation;
 
     @FXML
     /** button to set the map's zoom to 15*/
@@ -77,6 +68,26 @@ public class Controller {
     /** Accordion for all the different options */
     @FXML
     private Accordion leftControls;
+
+    /** section containing the location button */
+    @FXML
+    private TitledPane optionsLocations;
+
+    @FXML
+    /** button to set the map's center */
+    private Button buttonKaHarbour;
+
+    @FXML
+    /** button to set the map's center */
+    private Button buttonKaCastle;
+
+    @FXML
+    /** button to set the map's center */
+    private Button buttonKaStation;
+
+    @FXML
+    /** button to set the map's extent */
+    private Button buttonAllLocations;
 
     /** section miscellanous options */
     @FXML
@@ -116,7 +127,7 @@ public class Controller {
      * called after the fxml is loaded and all objects are created.
      */
     public void initialize() {
-        leftControls.setExpandedPane(optionsMapType);
+        leftControls.setExpandedPane(optionsLocations);
 
         // set the controls to disabled, this will be changed when the MapView is intialized
         setControlsDisable(true);
@@ -125,6 +136,9 @@ public class Controller {
         buttonKaHarbour.setOnAction(event -> mapView.setCenter(coordKarlsruheHarbour));
         buttonKaCastle.setOnAction(event -> mapView.setCenter(coordKarlsruheCastle));
         buttonKaStation.setOnAction(event -> mapView.setCenter(coordKarlsruheStation));
+
+        buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
+
         buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
 
         // connect the slider to the map's zoom
