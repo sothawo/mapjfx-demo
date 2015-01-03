@@ -15,15 +15,14 @@
 */
 package com.sothawo.mapjfx.demo;
 
-import com.sothawo.mapjfx.Coordinate;
-import com.sothawo.mapjfx.Extent;
-import com.sothawo.mapjfx.MapType;
-import com.sothawo.mapjfx.MapView;
+import com.sothawo.mapjfx.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 import java.text.MessageFormat;
@@ -46,6 +45,25 @@ public class Controller {
     private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
             coordKarlsruheHarbour, coordKarlsruheStation);
+
+    /** four markers */
+    private final Marker markerKaHarbour;
+    private final Marker markerKaCastle;
+    private final Marker markerKaStation;
+    private final Marker markerClick;
+
+    public Controller() {
+        markerKaHarbour = new Marker(getClass().getResource("/blue_map_marker.png"), -32, -64);
+        markerKaHarbour.setPosition(coordKarlsruheHarbour).setVisible(false);
+        markerKaCastle = new Marker(getClass().getResource("/green_map_marker.png"), -32, -64);
+        markerKaCastle.setPosition(coordKarlsruheCastle).setVisible(false);
+        markerKaStation = new Marker(getClass().getResource("/red_map_marker.png"), -32, -64);
+        markerKaStation.setPosition(coordKarlsruheStation).setVisible(false);
+        markerClick = new Marker(getClass().getResource("/orange_map_marker.png"), -32, -64);
+        markerClick.setVisible(false);
+        // no position for click marker yet
+    }
+
     /** default zoom value */
     private static final int ZOOM_DEFAULT = 14;
 
@@ -89,14 +107,6 @@ public class Controller {
     /** button to set the map's extent */
     private Button buttonAllLocations;
 
-    /** section miscellanous options */
-    @FXML
-    private TitledPane optionsMisc;
-
-    /** section map type */
-    @FXML
-    private TitledPane optionsMapType;
-
     /** for editing the animation duration */
     @FXML
     private TextField animationDuration;
@@ -120,6 +130,22 @@ public class Controller {
     /** ToggleGroup for the MapStyle radios */
     @FXML
     private ToggleGroup mapTypeGroup;
+
+    /** Check button for harbour marker */
+    @FXML
+    private CheckBox checkKaHarbourMarker;
+
+    /** Check button for castle marker */
+    @FXML
+    private CheckBox checkKaCastleMarker;
+
+    /** Check button for harbour marker */
+    @FXML
+    private CheckBox checkKaStationMarker;
+
+    /** Check button for harbour marker */
+    @FXML
+    private CheckBox checkClickMarker;
 
 // -------------------------- OTHER METHODS --------------------------
 
@@ -196,6 +222,31 @@ public class Controller {
             }
         });
         mapTypeGroup.selectToggle(radioMsOSM);
+
+        // add an event handler for singleclicks
+        mapView.addEventHandler(CoordinateEvent.MAP_CLICKED, event -> {
+            event.consume();
+            if (markerClick.getVisible()) {
+                markerClick.setPosition(event.getCoordinate());
+            }
+        });
+
+        // watch the checkboxes for the markers
+        checkKaHarbourMarker.setGraphic(new ImageView(new Image("/blue_map_marker.png", 16.0, 16.0, true, true)));
+        mapView.addMarker(markerKaHarbour);
+        checkKaHarbourMarker.selectedProperty().bindBidirectional(markerKaHarbour.visibleProperty());
+
+        checkKaCastleMarker.setGraphic(new ImageView(new Image("/green_map_marker.png", 16.0, 16.0, true, true)));
+        mapView.addMarker(markerKaCastle);
+        checkKaCastleMarker.selectedProperty().bindBidirectional(markerKaCastle.visibleProperty());
+
+        checkKaStationMarker.setGraphic(new ImageView(new Image("/red_map_marker.png", 16.0, 16.0, true, true)));
+        mapView.addMarker(markerKaStation);
+        checkKaStationMarker.selectedProperty().bindBidirectional(markerKaStation.visibleProperty());
+
+        checkClickMarker.setGraphic(new ImageView(new Image("/orange_map_marker.png", 16.0, 16.0, true, true)));
+        mapView.addMarker(markerClick);
+        checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
 
         mapView.initialize();
 
