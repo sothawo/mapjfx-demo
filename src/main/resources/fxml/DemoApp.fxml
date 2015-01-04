@@ -43,7 +43,8 @@
                                 <Button fx:id="buttonKaHarbour" text="Karlsruhe harbour" maxWidth="Infinity"/>
                                 <Button fx:id="buttonKaCastle" text="Karlsruhe castle" maxWidth="Infinity"/>
                                 <Button fx:id="buttonKaStation" text="Karlsruhe station" maxWidth="Infinity"/>
-                                <Button fx:id="buttonAllLocations" text="All three" maxWidth="Infinity"/>
+                                <Button fx:id="buttonKaSoccer" text="KSC soccer stadium" maxWidth="Infinity"/>
+                                <Button fx:id="buttonAllLocations" text="All" maxWidth="Infinity"/>
                             </children>
                         </VBox>
                     </content>
@@ -68,6 +69,7 @@
                                 <CheckBox fx:id="checkKaHarbourMarker" text="Karlsruhe harbour" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkKaCastleMarker" text="Karlsruhe castle" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkKaStationMarker" text="Karlsruhe station" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkKaSoccerMarker" text="KSC soccer stadium" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkClickMarker" text="click location" maxWidth="Infinity"/>
                             </children>
                         </VBox>

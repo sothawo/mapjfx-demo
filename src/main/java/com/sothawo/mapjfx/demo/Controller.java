@@ -43,13 +43,16 @@ public class Controller {
     private static final Coordinate coordKarlsruheCastle = new Coordinate(49.013517, 8.404435);
     private static final Coordinate coordKarlsruheHarbour = new Coordinate(49.015511, 8.323497);
     private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
+    private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.02003500522895, 8.412975323120108);
+
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
-            coordKarlsruheHarbour, coordKarlsruheStation);
+            coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
 
     /** four markers */
     private final Marker markerKaHarbour;
     private final Marker markerKaCastle;
     private final Marker markerKaStation;
+    private final Marker markerKaSoccer;
     private final Marker markerClick;
 
     public Controller() {
@@ -59,6 +62,8 @@ public class Controller {
         markerKaCastle.setPosition(coordKarlsruheCastle).setVisible(false);
         markerKaStation = new Marker(getClass().getResource("/red_map_marker.png"), -32, -64);
         markerKaStation.setPosition(coordKarlsruheStation).setVisible(false);
+        markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20);
+        markerKaSoccer.setPosition(coordKarlsruheSoccer).setVisible(false);
         markerClick = new Marker(getClass().getResource("/orange_map_marker.png"), -32, -64);
         markerClick.setVisible(false);
         // no position for click marker yet
@@ -104,6 +109,10 @@ public class Controller {
     private Button buttonKaStation;
 
     @FXML
+    /** button to set the map's center */
+    private Button buttonKaSoccer;
+
+    @FXML
     /** button to set the map's extent */
     private Button buttonAllLocations;
 
@@ -143,6 +152,10 @@ public class Controller {
     @FXML
     private CheckBox checkKaStationMarker;
 
+    /** Check button for soccer marker */
+    @FXML
+    private CheckBox checkKaSoccerMarker;
+
     /** Check button for harbour marker */
     @FXML
     private CheckBox checkClickMarker;
@@ -162,6 +175,7 @@ public class Controller {
         buttonKaHarbour.setOnAction(event -> mapView.setCenter(coordKarlsruheHarbour));
         buttonKaCastle.setOnAction(event -> mapView.setCenter(coordKarlsruheCastle));
         buttonKaStation.setOnAction(event -> mapView.setCenter(coordKarlsruheStation));
+        buttonKaSoccer.setOnAction(event -> mapView.setCenter(coordKarlsruheSoccer));
 
         buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
 
@@ -243,6 +257,10 @@ public class Controller {
         checkKaStationMarker.setGraphic(new ImageView(new Image("/red_map_marker.png", 16.0, 16.0, true, true)));
         mapView.addMarker(markerKaStation);
         checkKaStationMarker.selectedProperty().bindBidirectional(markerKaStation.visibleProperty());
+
+        checkKaSoccerMarker.setGraphic(new ImageView(new Image("/ksc.png", 16.0, 16.0, true, true)));
+        mapView.addMarker(markerKaSoccer);
+        checkKaSoccerMarker.selectedProperty().bindBidirectional(markerKaSoccer.visibleProperty());
 
         checkClickMarker.setGraphic(new ImageView(new Image("/orange_map_marker.png", 16.0, 16.0, true, true)));
         mapView.addMarker(markerClick);
