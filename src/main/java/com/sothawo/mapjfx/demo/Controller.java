@@ -1,5 +1,5 @@
 /*
- Copyright 2014 Peter-Josef Meisch (pj.meisch@sothawo.com)
+ Copyright 2015 Peter-Josef Meisch (pj.meisch@sothawo.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package com.sothawo.mapjfx.demo;
 
 import com.sothawo.mapjfx.*;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -43,7 +41,8 @@ public class Controller {
     private static final Coordinate coordKarlsruheCastle = new Coordinate(49.013517, 8.404435);
     private static final Coordinate coordKarlsruheHarbour = new Coordinate(49.015511, 8.323497);
     private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
-    private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.02003500522895, 8.412975323120108);
+    //    private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.02003500522895, 8.412975323120108);
+    private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.020035, 8.412975);
 
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
             coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
@@ -56,17 +55,19 @@ public class Controller {
     private final Marker markerClick;
 
     public Controller() {
-        markerKaHarbour = new Marker(getClass().getResource("/blue_map_marker.png"), -32, -64);
-        markerKaHarbour.setPosition(coordKarlsruheHarbour).setVisible(false);
-        markerKaCastle = new Marker(getClass().getResource("/green_map_marker.png"), -32, -64);
-        markerKaCastle.setPosition(coordKarlsruheCastle).setVisible(false);
-        markerKaStation = new Marker(getClass().getResource("/red_map_marker.png"), -32, -64);
-        markerKaStation.setPosition(coordKarlsruheStation).setVisible(false);
-        markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20);
-        markerKaSoccer.setPosition(coordKarlsruheSoccer).setVisible(false);
-        markerClick = new Marker(getClass().getResource("/orange_map_marker.png"), -32, -64);
-        markerClick.setVisible(false);
+        // a couple of markers using the provided ones
+        markerKaHarbour = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKarlsruheHarbour).setVisible(
+                false);
+        markerKaCastle = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordKarlsruheCastle).setVisible(
+                false);
+        markerKaStation =
+                Marker.createProvided(Marker.Provided.RED).setPosition(coordKarlsruheStation).setVisible(false);
         // no position for click marker yet
+        markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
+
+        // a merker with a custom icon
+        markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
+                .setVisible(false);
     }
 
     /** default zoom value */
@@ -171,7 +172,7 @@ public class Controller {
         // set the controls to disabled, this will be changed when the MapView is intialized
         setControlsDisable(true);
 
-        // wire up the buttons
+        // wire up the location buttons
         buttonKaHarbour.setOnAction(event -> mapView.setCenter(coordKarlsruheHarbour));
         buttonKaCastle.setOnAction(event -> mapView.setCenter(coordKarlsruheCastle));
         buttonKaStation.setOnAction(event -> mapView.setCenter(coordKarlsruheStation));
@@ -179,65 +180,55 @@ public class Controller {
 
         buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
 
-        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
 
-        // connect the slider to the map's zoom
+        // wire the zoom button and connect the slider to the map's zoom
+        buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
         sliderZoom.valueProperty().bindBidirectional(mapView.zoomProperty());
 
-        // add a listener to the animationDuration field and make sure, we only accept int values
-        animationDuration.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.isEmpty()) {
-                    mapView.setAnimationDuration(0);
-                } else {
-                    try {
-                        mapView.setAnimationDuration(Integer.parseInt(newValue));
-                    } catch (NumberFormatException e) {
-                        animationDuration.setText(oldValue);
-                    }
+        // add a listener to the animationDuration field and make sure we only accept int values
+        animationDuration.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                mapView.setAnimationDuration(0);
+            } else {
+                try {
+                    mapView.setAnimationDuration(Integer.parseInt(newValue));
+                } catch (NumberFormatException e) {
+                    animationDuration.setText(oldValue);
                 }
             }
         });
         animationDuration.setText("500");
 
-        // bind the map's center and zoom properties to the label and format them
+        // bind the map's center and zoom properties to the corrsponding labels and format them
         labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
         labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));
 
         // watch the MapView's initialized property to finish initialization
-        mapView.initializedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    logger.fine("setting center and enabling controls...");
-                    // start at the harbour with default zoom
-                    mapView.setZoom(ZOOM_DEFAULT);
-                    mapView.setMapType(MapType.OSM);
-                    mapView.setCenter(coordKarlsruheHarbour);
-                    // now enable the controls
-                    setControlsDisable(false);
-                }
+        mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                logger.fine("setting center and enabling controls...");
+                // start at the harbour with default zoom
+                mapView.setZoom(ZOOM_DEFAULT);
+                mapView.setCenter(coordKarlsruheHarbour);
+                // now enable the controls
+                setControlsDisable(false);
             }
         });
 
-        // the different RadioButtons
-        mapTypeGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                logger.fine(() -> MessageFormat.format("map type toggled to {0}", newValue.toString()));
-                MapType mapType = MapType.OSM;
-                if (newValue == radioMsOSM) {
-                    mapType = MapType.OSM;
-                } else if (newValue == radioMsMQ) {
-                    mapType = MapType.MAPQUEST_OSM;
-                }
-                mapView.setMapType(mapType);
+        // observe the map type radiobuttons
+        mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            logger.fine(() -> MessageFormat.format("map type toggled to {0}", newValue.toString()));
+            MapType mapType = MapType.OSM;
+            if (newValue == radioMsOSM) {
+                mapType = MapType.OSM;
+            } else if (newValue == radioMsMQ) {
+                mapType = MapType.MAPQUEST_OSM;
             }
+            mapView.setMapType(mapType);
         });
         mapTypeGroup.selectToggle(radioMsOSM);
 
-        // add an event handler for singleclicks
+        // add an event handler for singleclicks, set the click marker to the new position
         mapView.addEventHandler(CoordinateEvent.MAP_CLICKED, event -> {
             event.consume();
             if (markerClick.getVisible()) {
@@ -245,36 +236,41 @@ public class Controller {
             }
         });
 
-        // watch the checkboxes for the markers
-        checkKaHarbourMarker.setGraphic(new ImageView(new Image("/blue_map_marker.png", 16.0, 16.0, true, true)));
+        // add the markers to the map - they are still invisible
         mapView.addMarker(markerKaHarbour);
-        checkKaHarbourMarker.selectedProperty().bindBidirectional(markerKaHarbour.visibleProperty());
-
-        checkKaCastleMarker.setGraphic(new ImageView(new Image("/green_map_marker.png", 16.0, 16.0, true, true)));
         mapView.addMarker(markerKaCastle);
-        checkKaCastleMarker.selectedProperty().bindBidirectional(markerKaCastle.visibleProperty());
-
-        checkKaStationMarker.setGraphic(new ImageView(new Image("/red_map_marker.png", 16.0, 16.0, true, true)));
         mapView.addMarker(markerKaStation);
-        checkKaStationMarker.selectedProperty().bindBidirectional(markerKaStation.visibleProperty());
-
-        checkKaSoccerMarker.setGraphic(new ImageView(new Image("/ksc.png", 16.0, 16.0, true, true)));
         mapView.addMarker(markerKaSoccer);
-        checkKaSoccerMarker.selectedProperty().bindBidirectional(markerKaSoccer.visibleProperty());
-
-        checkClickMarker.setGraphic(new ImageView(new Image("/orange_map_marker.png", 16.0, 16.0, true, true)));
         mapView.addMarker(markerClick);
+
+        // add the graphics to the checkboxes
+        checkKaHarbourMarker.setGraphic(
+                new ImageView(new Image(markerKaHarbour.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+        checkKaCastleMarker.setGraphic(
+                new ImageView(new Image(markerKaCastle.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+        checkKaStationMarker.setGraphic(
+                new ImageView(new Image(markerKaStation.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+        checkKaSoccerMarker.setGraphic(
+                new ImageView(new Image(markerKaSoccer.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+        checkClickMarker.setGraphic(
+                new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+
+        // bind the checkboxes to the markers visibility
+        checkKaHarbourMarker.selectedProperty().bindBidirectional(markerKaHarbour.visibleProperty());
+        checkKaCastleMarker.selectedProperty().bindBidirectional(markerKaCastle.visibleProperty());
+        checkKaStationMarker.selectedProperty().bindBidirectional(markerKaStation.visibleProperty());
+        checkKaSoccerMarker.selectedProperty().bindBidirectional(markerKaSoccer.visibleProperty());
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
 
+        // finally initialize the map view
         mapView.initialize();
-
         logger.fine("initialization finished");
     }
 
     /**
      * enables / disables the different controls
      *
-     * @param flag
+     * @param flag if true the controls are disabled
      */
     private void setControlsDisable(boolean flag) {
         topControls.setDisable(flag);
