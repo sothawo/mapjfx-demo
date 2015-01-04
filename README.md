@@ -39,9 +39,14 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
-### 1.3.0-SNAPSHOT
+### 1.3.1-SNAPSHOT
 
 current development version
+
+### 1.3.0-SNAPSHOT
+
+* added markers, predefined and custom
+* added single click handler
 
 ### 1.1.1
 
