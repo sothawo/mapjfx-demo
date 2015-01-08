@@ -41,7 +41,6 @@ public class Controller {
     private static final Coordinate coordKarlsruheCastle = new Coordinate(49.013517, 8.404435);
     private static final Coordinate coordKarlsruheHarbour = new Coordinate(49.015511, 8.323497);
     private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
-    //    private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.02003500522895, 8.412975323120108);
     private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.020035, 8.412975);
 
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
@@ -65,7 +64,7 @@ public class Controller {
         // no position for click marker yet
         markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
 
-        // a merker with a custom icon
+        // a marker with a custom icon
         markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
                 .setVisible(false);
     }
