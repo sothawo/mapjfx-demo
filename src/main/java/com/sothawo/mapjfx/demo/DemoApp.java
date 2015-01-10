@@ -20,11 +20,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * Demo application for the mapjfx component.
@@ -37,19 +35,11 @@ public class DemoApp extends Application {
     /** Logger for the class */
     private static final Logger logger;
 
-// -------------------------- STATIC METHODS --------------------------
-
+    // -------------------------- STATIC METHODS --------------------------
     static {
-        // init the logging from the classpath logging.properties
-        InputStream inputStream = DemoApp.class.getResourceAsStream("/logging.properties");
-        if (null != inputStream) {
-            try {
-                LogManager.getLogManager().readConfiguration(inputStream);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        logger = Logger.getLogger(DemoApp.class.getCanonicalName());
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
+        logger = LoggerFactory.getLogger(DemoApp.class);
     }
 
 // -------------------------- OTHER METHODS --------------------------
@@ -58,7 +48,7 @@ public class DemoApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         logger.info("starting DemoApp");
         String fxmlFile = "/fxml/DemoApp.fxml";
-        logger.fine(() -> "loading fxml file " + fxmlFile);
+        logger.debug("loading fxml file {}", fxmlFile);
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
@@ -68,7 +58,7 @@ public class DemoApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        logger.fine("application start method finished.");
+        logger.debug("application start method finished.");
     }
 
 // --------------------------- main() method ---------------------------
