@@ -1,4 +1,4 @@
-<configuration scan="true">
+<configuration scan="true" debug="true">
     <!-- context listener needed for redirection of JUL to slf4j to prevent performance problems -->
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
 
@@ -10,13 +10,12 @@
         </encoder>
     </appender>
 
-    <logger name="com.sothawo" level="info" />
-    <logger name="com.sothawo.mapjfx.demo" level="debug" />
+    <logger name="com.sothawo" level="TRACE" />
 
     <!--  setting this to more than INFO crashes the JVM -->
     <logger name="com.sun.javafx.webkit.prism" level = "info" />
 
-    <root level="warn">
+    <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
