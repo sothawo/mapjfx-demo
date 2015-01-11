@@ -6,11 +6,12 @@
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) [%thread] %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.sothawo" level="all" />
+    <logger name="com.sothawo" level="info" />
+    <logger name="com.sothawo.mapjfx.demo" level="debug" />
 
     <!--  setting this to more than INFO crashes the JVM -->
     <logger name="com.sun.javafx.webkit.prism" level = "info" />

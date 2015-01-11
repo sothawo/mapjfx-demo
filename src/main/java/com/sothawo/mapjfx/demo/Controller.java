@@ -22,9 +22,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
-import java.util.logging.Logger;
 
 /**
  * Controller for the FXML defined code.
@@ -35,7 +36,7 @@ public class Controller {
 // ------------------------------ FIELDS ------------------------------
 
     /** logger for the class */
-    private static final Logger logger = Logger.getLogger(Controller.class.getCanonicalName());
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     /** some coordinates from around town */
     private static final Coordinate coordKarlsruheCastle = new Coordinate(49.013517, 8.404435);
@@ -166,6 +167,7 @@ public class Controller {
      * called after the fxml is loaded and all objects are created.
      */
     public void initialize() {
+        logger.trace("begin initialize");
         leftControls.setExpandedPane(optionsLocations);
 
         // set the controls to disabled, this will be changed when the MapView is intialized
@@ -178,7 +180,7 @@ public class Controller {
         buttonKaSoccer.setOnAction(event -> mapView.setCenter(coordKarlsruheSoccer));
 
         buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
-
+logger.trace("location buttons done");
 
         // wire the zoom button and connect the slider to the map's zoom
         buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
@@ -201,11 +203,13 @@ public class Controller {
         // bind the map's center and zoom properties to the corrsponding labels and format them
         labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
         labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));
+        logger.trace("options and labels done");
 
         // watch the MapView's initialized property to finish initialization
         mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                logger.fine("setting center and enabling controls...");
+                logger.trace("map intialized");
+                logger.debug("setting center and enabling controls...");
                 // start at the harbour with default zoom
                 mapView.setZoom(ZOOM_DEFAULT);
                 mapView.setCenter(coordKarlsruheHarbour);
@@ -216,7 +220,7 @@ public class Controller {
 
         // observe the map type radiobuttons
         mapTypeGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            logger.fine(() -> MessageFormat.format("map type toggled to {0}", newValue.toString()));
+            logger.debug("map type toggled to {}", newValue.toString());
             MapType mapType = MapType.OSM;
             if (newValue == radioMsOSM) {
                 mapType = MapType.OSM;
@@ -234,6 +238,7 @@ public class Controller {
                 markerClick.setPosition(event.getCoordinate());
             }
         });
+        logger.trace("map handlers initialized");
 
         // add the markers to the map - they are still invisible
         mapView.addMarker(markerKaHarbour);
@@ -241,6 +246,7 @@ public class Controller {
         mapView.addMarker(markerKaStation);
         mapView.addMarker(markerKaSoccer);
         mapView.addMarker(markerClick);
+        logger.trace("markers added");
 
         // add the graphics to the checkboxes
         checkKaHarbourMarker.setGraphic(
@@ -260,10 +266,12 @@ public class Controller {
         checkKaStationMarker.selectedProperty().bindBidirectional(markerKaStation.visibleProperty());
         checkKaSoccerMarker.selectedProperty().bindBidirectional(markerKaSoccer.visibleProperty());
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
+        logger.trace("marker checks done");
 
         // finally initialize the map view
+        logger.trace("start map initialization");
         mapView.initialize();
-        logger.fine("initialization finished");
+        logger.debug("initialization finished");
     }
 
     /**

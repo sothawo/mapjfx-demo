@@ -51,11 +51,13 @@ public class DemoApp extends Application {
         logger.debug("loading fxml file {}", fxmlFile);
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
+        logger.trace("stage loaded");
         Scene scene = new Scene(rootNode);
+        logger.trace("scene created");
 
         primaryStage.setTitle("sothawo mapjfx demo application");
         primaryStage.setScene(scene);
+        logger.trace("showing scene");
         primaryStage.show();
 
         logger.debug("application start method finished.");
@@ -64,6 +66,8 @@ public class DemoApp extends Application {
 // --------------------------- main() method ---------------------------
 
     public static void main(String[] args) {
+        logger.trace("begin main");
         launch(args);
+        logger.trace("end main");
     }
 }
