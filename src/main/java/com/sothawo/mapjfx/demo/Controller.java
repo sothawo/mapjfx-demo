@@ -17,15 +17,26 @@ package com.sothawo.mapjfx.demo;
 
 import com.sothawo.mapjfx.*;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.MessageFormat;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Controller for the FXML defined code.
@@ -47,31 +58,15 @@ public class Controller {
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
             coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
 
+    /** default zoom value */
+    private static final int ZOOM_DEFAULT = 14;
+
     /** four markers */
     private final Marker markerKaHarbour;
     private final Marker markerKaCastle;
     private final Marker markerKaStation;
     private final Marker markerKaSoccer;
     private final Marker markerClick;
-
-    public Controller() {
-        // a couple of markers using the provided ones
-        markerKaHarbour = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKarlsruheHarbour).setVisible(
-                false);
-        markerKaCastle = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordKarlsruheCastle).setVisible(
-                false);
-        markerKaStation =
-                Marker.createProvided(Marker.Provided.RED).setPosition(coordKarlsruheStation).setVisible(false);
-        // no position for click marker yet
-        markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
-
-        // a marker with a custom icon
-        markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
-                .setVisible(false);
-    }
-
-    /** default zoom value */
-    private static final int ZOOM_DEFAULT = 14;
 
     @FXML
     /** button to set the map's zoom to 15*/
@@ -161,6 +156,36 @@ public class Controller {
     @FXML
     private CheckBox checkClickMarker;
 
+    /** the first CoordinateLine */
+    private CoordinateLine trackMagenta;
+    /** Check button for first track */
+    @FXML
+    private CheckBox checkTrackMagenta;
+
+    /** the second CoordinateLine */
+    private CoordinateLine trackCyan;
+    /** Check button for first track */
+    @FXML
+    private CheckBox checkTrackCyan;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public Controller() {
+        // a couple of markers using the provided ones
+        markerKaHarbour = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKarlsruheHarbour).setVisible(
+                false);
+        markerKaCastle = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordKarlsruheCastle).setVisible(
+                false);
+        markerKaStation =
+                Marker.createProvided(Marker.Provided.RED).setPosition(coordKarlsruheStation).setVisible(false);
+        // no position for click marker yet
+        markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
+
+        // a marker with a custom icon
+        markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
+                .setVisible(false);
+    }
+
 // -------------------------- OTHER METHODS --------------------------
 
     /**
@@ -180,7 +205,7 @@ public class Controller {
         buttonKaSoccer.setOnAction(event -> mapView.setCenter(coordKarlsruheSoccer));
 
         buttonAllLocations.setOnAction(event -> mapView.setExtent(extentAllLocations));
-logger.trace("location buttons done");
+        logger.trace("location buttons done");
 
         // wire the zoom button and connect the slider to the map's zoom
         buttonZoom.setOnAction(event -> mapView.setZoom(ZOOM_DEFAULT));
@@ -213,6 +238,9 @@ logger.trace("location buttons done");
                 // start at the harbour with default zoom
                 mapView.setZoom(ZOOM_DEFAULT);
                 mapView.setCenter(coordKarlsruheHarbour);
+                // add the tracks
+                mapView.addCoordinateLine(trackMagenta);
+                mapView.addCoordinateLine(trackCyan);
                 // now enable the controls
                 setControlsDisable(false);
             }
@@ -268,6 +296,27 @@ logger.trace("location buttons done");
         checkClickMarker.selectedProperty().bindBidirectional(markerClick.visibleProperty());
         logger.trace("marker checks done");
 
+        // load two coordinate lines
+        try {
+            trackMagenta = loadCoordinateLine(getClass().getResource("/M1.csv").toURI()).orElse(new CoordinateLine
+                    ()).setColor(Color.MAGENTA);
+            trackCyan = loadCoordinateLine(getClass().getResource("/M2.csv").toURI()).orElse(new CoordinateLine
+                    ()).setColor(Color.CYAN).setWidth(7);
+            logger.trace("tracks loaded");
+            checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
+            checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
+            logger.trace("tracks checks done");
+            // get the extent of both tracks
+            Extent tracksExtent = Extent.forCoordinates(
+                    Stream.concat(trackMagenta.getCoordinateStream(), trackCyan.getCoordinateStream())
+                            .collect(Collectors.toList()));
+            ChangeListener<Boolean> trackVisibleListener =
+                    (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
+            trackMagenta.visibleProperty().addListener(trackVisibleListener);
+            trackCyan.visibleProperty().addListener(trackVisibleListener);
+        } catch (URISyntaxException e) {
+            logger.error("load coordinate line");
+        }
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize();
@@ -277,10 +326,31 @@ logger.trace("location buttons done");
     /**
      * enables / disables the different controls
      *
-     * @param flag if true the controls are disabled
+     * @param flag
+     *         if true the controls are disabled
      */
     private void setControlsDisable(boolean flag) {
         topControls.setDisable(flag);
         leftControls.setDisable(flag);
+    }
+
+    /**
+     * load a coordinateLine from the given uri in lat;lon csv format
+     *
+     * @param uri
+     *         uri where to load from
+     * @return optional CoordinateLine object
+     */
+    private Optional<CoordinateLine> loadCoordinateLine(URI uri) {
+        try (
+                Stream<String> lines = Files.lines(Paths.get(Objects.requireNonNull(uri)), StandardCharsets.UTF_8)) {
+            return Optional.ofNullable(new CoordinateLine(
+                    lines.map(line -> line.split(";")).filter(array -> array.length == 2)
+                            .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
+                            .collect(Collectors.toList())));
+        } catch (IOException | NumberFormatException e) {
+            logger.error("load {}", uri, e);
+        }
+        return Optional.empty();
     }
 }
