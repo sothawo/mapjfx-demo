@@ -89,6 +89,16 @@
                         </VBox>
                     </content>
                 </TitledPane>
+                <TitledPane fx:id="optionsTracks" animated="true" text="tracks">
+                    <content>
+                        <VBox spacing="10.0">
+                            <children>
+                                <CheckBox fx:id="checkTrackMagenta" text="magenta track" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkTrackCyan" text="cyan track" maxWidth="Infinity"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </TitledPane>
                 <TitledPane fx:id="optionsMisc" animated="true" text="misc">
                     <content>
                         <VBox spacing="10.0">

@@ -27,13 +27,11 @@ import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -233,16 +231,7 @@ public class Controller {
         // watch the MapView's initialized property to finish initialization
         mapView.initializedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                logger.trace("map intialized");
-                logger.debug("setting center and enabling controls...");
-                // start at the harbour with default zoom
-                mapView.setZoom(ZOOM_DEFAULT);
-                mapView.setCenter(coordKarlsruheHarbour);
-                // add the tracks
-                mapView.addCoordinateLine(trackMagenta);
-                mapView.addCoordinateLine(trackCyan);
-                // now enable the controls
-                setControlsDisable(false);
+                afterMapIsInitialized();
             }
         });
 
@@ -268,14 +257,6 @@ public class Controller {
         });
         logger.trace("map handlers initialized");
 
-        // add the markers to the map - they are still invisible
-        mapView.addMarker(markerKaHarbour);
-        mapView.addMarker(markerKaCastle);
-        mapView.addMarker(markerKaStation);
-        mapView.addMarker(markerKaSoccer);
-        mapView.addMarker(markerClick);
-        logger.trace("markers added");
-
         // add the graphics to the checkboxes
         checkKaHarbourMarker.setGraphic(
                 new ImageView(new Image(markerKaHarbour.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
@@ -297,26 +278,23 @@ public class Controller {
         logger.trace("marker checks done");
 
         // load two coordinate lines
-        try {
-            trackMagenta = loadCoordinateLine(getClass().getResource("/M1.csv").toURI()).orElse(new CoordinateLine
-                    ()).setColor(Color.MAGENTA);
-            trackCyan = loadCoordinateLine(getClass().getResource("/M2.csv").toURI()).orElse(new CoordinateLine
-                    ()).setColor(Color.CYAN).setWidth(7);
-            logger.trace("tracks loaded");
-            checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
-            checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
-            logger.trace("tracks checks done");
-            // get the extent of both tracks
-            Extent tracksExtent = Extent.forCoordinates(
-                    Stream.concat(trackMagenta.getCoordinateStream(), trackCyan.getCoordinateStream())
-                            .collect(Collectors.toList()));
-            ChangeListener<Boolean> trackVisibleListener =
-                    (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
-            trackMagenta.visibleProperty().addListener(trackVisibleListener);
-            trackCyan.visibleProperty().addListener(trackVisibleListener);
-        } catch (URISyntaxException e) {
-            logger.error("load coordinate line");
-        }
+        trackMagenta = loadCoordinateLine(getClass().getResource("/M1.csv")).orElse(new CoordinateLine
+                ()).setColor(Color.MAGENTA);
+        trackCyan = loadCoordinateLine(getClass().getResource("/M2.csv")).orElse(new CoordinateLine
+                ()).setColor(Color.CYAN).setWidth(7);
+        logger.trace("tracks loaded");
+        checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
+        checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
+        logger.trace("tracks checks done");
+        // get the extent of both tracks
+        Extent tracksExtent = Extent.forCoordinates(
+                Stream.concat(trackMagenta.getCoordinateStream(), trackCyan.getCoordinateStream())
+                        .collect(Collectors.toList()));
+        ChangeListener<Boolean> trackVisibleListener =
+                (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
+        trackMagenta.visibleProperty().addListener(trackVisibleListener);
+        trackCyan.visibleProperty().addListener(trackVisibleListener);
+
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize();
@@ -335,21 +313,48 @@ public class Controller {
     }
 
     /**
+     * finishes setup after the mpa is initialzed
+     */
+    private void afterMapIsInitialized() {
+        logger.trace("map intialized");
+        logger.debug("setting center and enabling controls...");
+        // start at the harbour with default zoom
+        mapView.setZoom(ZOOM_DEFAULT);
+        mapView.setCenter(coordKarlsruheHarbour);
+        // add the markers to the map - they are still invisible
+        mapView.addMarker(markerKaHarbour);
+        mapView.addMarker(markerKaCastle);
+        mapView.addMarker(markerKaStation);
+        mapView.addMarker(markerKaSoccer);
+        mapView.addMarker(markerClick);
+        logger.trace("markers added");
+        // add the tracks
+        mapView.addCoordinateLine(trackMagenta);
+        mapView.addCoordinateLine(trackCyan);
+        // now enable the controls
+        setControlsDisable(false);
+    }
+
+    /**
      * load a coordinateLine from the given uri in lat;lon csv format
      *
-     * @param uri
-     *         uri where to load from
+     * @param url
+     *         url where to load from
      * @return optional CoordinateLine object
+     * @throws java.lang.NullPointerException
+     *         if uri is null
      */
-    private Optional<CoordinateLine> loadCoordinateLine(URI uri) {
+    private Optional<CoordinateLine> loadCoordinateLine(URL url) {
         try (
-                Stream<String> lines = Files.lines(Paths.get(Objects.requireNonNull(uri)), StandardCharsets.UTF_8)) {
+                Stream<String> lines = new BufferedReader(
+                        new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).lines()
+        ) {
             return Optional.ofNullable(new CoordinateLine(
                     lines.map(line -> line.split(";")).filter(array -> array.length == 2)
                             .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
                             .collect(Collectors.toList())));
         } catch (IOException | NumberFormatException e) {
-            logger.error("load {}", uri, e);
+            logger.error("load {}", url, e);
         }
         return Optional.empty();
     }
