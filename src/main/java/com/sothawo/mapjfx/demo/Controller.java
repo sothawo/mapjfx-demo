@@ -59,7 +59,7 @@ public class Controller {
     /** default zoom value */
     private static final int ZOOM_DEFAULT = 14;
 
-    /** four markers */
+    /** the markers */
     private final Marker markerKaHarbour;
     private final Marker markerKaCastle;
     private final Marker markerKaStation;
@@ -251,8 +251,12 @@ public class Controller {
         // add an event handler for singleclicks, set the click marker to the new position
         mapView.addEventHandler(CoordinateEvent.MAP_CLICKED, event -> {
             event.consume();
-            if (markerClick.getVisible()) {
-                markerClick.setPosition(event.getCoordinate());
+            // the marker must be added to the map when the coorinate is first set, as the first add with no position
+            // is ignored by the map
+            boolean needToAdd = null == markerClick.getPosition();
+            markerClick.setPosition(event.getCoordinate());
+            if (needToAdd) {
+                mapView.addMarker(markerClick);
             }
         });
         logger.trace("map handlers initialized");
