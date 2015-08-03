@@ -150,7 +150,7 @@ public class Controller {
     @FXML
     private CheckBox checkKaSoccerMarker;
 
-    /** Check button for harbour marker */
+    /** Check button for click marker */
     @FXML
     private CheckBox checkClickMarker;
 
@@ -248,11 +248,16 @@ public class Controller {
         });
         mapTypeGroup.selectToggle(radioMsOSM);
 
-        // add an event handler for singleclicks, set the click marker to the new position
+        // add an event handler for singleclicks, set the click marker to the new position when it's visible
         mapView.addEventHandler(CoordinateEvent.MAP_CLICKED, event -> {
             event.consume();
             if (markerClick.getVisible()) {
+                boolean needToAddMarker = (null == markerClick.getPosition());
                 markerClick.setPosition(event.getCoordinate());
+                if (needToAddMarker) {
+                    // adding can only be done after coordinate is set
+                    mapView.addMarker(markerClick);
+                }
             }
         });
         logger.trace("map handlers initialized");
@@ -326,7 +331,7 @@ public class Controller {
         mapView.addMarker(markerKaCastle);
         mapView.addMarker(markerKaStation);
         mapView.addMarker(markerKaSoccer);
-        mapView.addMarker(markerClick);
+        // can't add the markerClick at this moment, it has no position, so it would not be added to the map
         logger.trace("markers added");
         // add the tracks
         mapView.addCoordinateLine(trackMagenta);
