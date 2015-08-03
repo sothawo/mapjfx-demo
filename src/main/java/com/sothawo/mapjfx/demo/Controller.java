@@ -59,7 +59,7 @@ public class Controller {
     /** default zoom value */
     private static final int ZOOM_DEFAULT = 14;
 
-    /** four markers */
+    /** the markers */
     private final Marker markerKaHarbour;
     private final Marker markerKaCastle;
     private final Marker markerKaStation;
