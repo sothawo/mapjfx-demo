@@ -114,6 +114,10 @@ public class Controller {
     @FXML
     private TextField animationDuration;
 
+    /** the BIng Maps API Key. */
+    @FXML
+    private TextField bingMapsApiKey;
+
     /** Label to display the current center */
     @FXML
     private Label labelCenter;
@@ -129,6 +133,14 @@ public class Controller {
     /** RadioButton for MapStyle MapQuest */
     @FXML
     private RadioButton radioMsMQ;
+
+    /** RadioButton for MapStyle Bing Road */
+    @FXML
+    private RadioButton radioMsBR;
+
+    /** RadioButton for MapStyle Bing Aerial*/
+    @FXML
+    private RadioButton radioMsBA;
 
     /** ToggleGroup for the MapStyle radios */
     @FXML
@@ -243,7 +255,12 @@ public class Controller {
                 mapType = MapType.OSM;
             } else if (newValue == radioMsMQ) {
                 mapType = MapType.MAPQUEST_OSM;
+            } else if (newValue == radioMsBR) {
+                mapType = MapType.BINGMAPS_ROAD;
+            } else if (newValue == radioMsBA) {
+                mapType = MapType.BINGMAPS_AERIAL;
             }
+            mapView.setBingMapsApiKey(bingMapsApiKey.getText());
             mapView.setMapType(mapType);
         });
         mapTypeGroup.selectToggle(radioMsOSM);

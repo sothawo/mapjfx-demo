@@ -39,9 +39,13 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
-### 1.4.9-SNAPSHOT
+### 1.5.1-SNAPSHOT
 
 current development version
+
+### 1.5.0
+
+* added entry for BingMaps API Key and corresponding selection.
 
 ### 1.3.0-SNAPSHOT
 
