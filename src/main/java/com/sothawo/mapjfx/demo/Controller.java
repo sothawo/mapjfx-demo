@@ -15,11 +15,26 @@
 */
 package com.sothawo.mapjfx.demo;
 
-import com.sothawo.mapjfx.*;
+import com.sothawo.mapjfx.Coordinate;
+import com.sothawo.mapjfx.CoordinateEvent;
+import com.sothawo.mapjfx.CoordinateLine;
+import com.sothawo.mapjfx.Extent;
+import com.sothawo.mapjfx.MapLabel;
+import com.sothawo.mapjfx.MapType;
+import com.sothawo.mapjfx.MapView;
+import com.sothawo.mapjfx.Marker;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -44,27 +59,33 @@ import java.util.stream.Stream;
 public class Controller {
 // ------------------------------ FIELDS ------------------------------
 
-    /** logger for the class */
+    /** logger for the class. */
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-    /** some coordinates from around town */
+    /** some coordinates from around town. */
     private static final Coordinate coordKarlsruheCastle = new Coordinate(49.013517, 8.404435);
     private static final Coordinate coordKarlsruheHarbour = new Coordinate(49.015511, 8.323497);
     private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
     private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.020035, 8.412975);
-
+    private static final Coordinate coordKarlsruheUniversity = new Coordinate(49.011809, 8.413639);
     private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
             coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
 
-    /** default zoom value */
+    /** default zoom value. */
     private static final int ZOOM_DEFAULT = 14;
 
-    /** the markers */
+    /** the markers. */
     private final Marker markerKaHarbour;
     private final Marker markerKaCastle;
     private final Marker markerKaStation;
     private final Marker markerKaSoccer;
     private final Marker markerClick;
+
+    /** the labels. */
+    private final MapLabel labelKaUniversity;
+    private final MapLabel labelKaCastle;
+    private final MapLabel labelKaStation;
+    private final MapLabel labelClick;
 
     @FXML
     /** button to set the map's zoom to 15*/
@@ -138,7 +159,7 @@ public class Controller {
     @FXML
     private RadioButton radioMsBR;
 
-    /** RadioButton for MapStyle Bing Aerial*/
+    /** RadioButton for MapStyle Bing Aerial */
     @FXML
     private RadioButton radioMsBA;
 
@@ -194,6 +215,17 @@ public class Controller {
         // a marker with a custom icon
         markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
                 .setVisible(false);
+
+        // the fix label
+        labelKaUniversity = new MapLabel("university").setPosition(coordKarlsruheUniversity).setVisible(true);
+        // the attached labels
+        labelKaCastle = new MapLabel("castle").setVisible(false);
+        labelKaStation = new MapLabel("station").setVisible(false);
+        labelClick = new MapLabel("click!").setVisible(false);
+
+        markerKaCastle.attachLabel(labelKaCastle);
+        markerKaStation.attachLabel(labelKaStation);
+        markerClick.attachLabel(labelClick);
     }
 
 // -------------------------- OTHER METHODS --------------------------
@@ -235,7 +267,7 @@ public class Controller {
         });
         animationDuration.setText("500");
 
-        // bind the map's center and zoom properties to the corrsponding labels and format them
+        // bind the map's center and zoom properties to the corresponding labels and format them
         labelCenter.textProperty().bind(Bindings.format("center: %s", mapView.centerProperty()));
         labelZoom.textProperty().bind(Bindings.format("zoom: %.0f", mapView.zoomProperty()));
         logger.trace("options and labels done");
@@ -349,7 +381,10 @@ public class Controller {
         mapView.addMarker(markerKaStation);
         mapView.addMarker(markerKaSoccer);
         // can't add the markerClick at this moment, it has no position, so it would not be added to the map
-        logger.trace("markers added");
+
+        // add the fix label, the other's are attached to markers.
+        mapView.addLabel(labelKaUniversity);
+
         // add the tracks
         mapView.addCoordinateLine(trackMagenta);
         mapView.addCoordinateLine(trackCyan);
@@ -371,7 +406,7 @@ public class Controller {
                 Stream<String> lines = new BufferedReader(
                         new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).lines()
         ) {
-            return Optional.ofNullable(new CoordinateLine(
+            return Optional.of(new CoordinateLine(
                     lines.map(line -> line.split(";")).filter(array -> array.length == 2)
                             .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
                             .collect(Collectors.toList())));
