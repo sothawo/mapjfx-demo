@@ -216,12 +216,12 @@ public class Controller {
         markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
                 .setVisible(false);
 
-        // the fix label
+        // the fix label, default style
         labelKaUniversity = new MapLabel("university").setPosition(coordKarlsruheUniversity).setVisible(true);
-        // the attached labels
-        labelKaCastle = new MapLabel("castle").setVisible(false);
-        labelKaStation = new MapLabel("station").setVisible(false);
-        labelClick = new MapLabel("click!").setVisible(false);
+        // the attached labels, custom style
+        labelKaCastle = new MapLabel("castle", 10, -10).setVisible(false).setCssClass("green-label");
+        labelKaStation = new MapLabel("station", 10, -10).setVisible(false).setCssClass("red-label");
+        labelClick = new MapLabel("click!", 10, -10).setVisible(false).setCssClass("orange-label");
 
         markerKaCastle.attachLabel(labelKaCastle);
         markerKaStation.attachLabel(labelKaStation);
@@ -235,6 +235,10 @@ public class Controller {
      */
     public void initialize() {
         logger.trace("begin initialize");
+
+        // set the custom css file for the MapView
+        mapView.setCustomMapviewCssURL(getClass().getResource("/custom_mapview.css"));
+
         leftControls.setExpandedPane(optionsLocations);
 
         // set the controls to disabled, this will be changed when the MapView is intialized

@@ -1,0 +1,15 @@
+
+.red-label {
+    padding: 2px 10px;
+    background: #e6262b linear-gradient(#e67b7b, #e6262b);
+}
+
+.orange-label {
+    padding: 2px 10px;
+    background: #e69327 linear-gradient(#e6a38f, #e69327);
+}
+
+.green-label {
+    padding: 2px 10px;
+    background: #356425 linear-gradient(#93ee93, #356425);
+}
