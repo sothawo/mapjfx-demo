@@ -3,7 +3,7 @@
 
     <groupId>com.sothawo</groupId>
     <artifactId>mapjfx-demo</artifactId>
-    <version>1.6.2-SNAPSHOT</version>
+    <version>1.6.2</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>demo applicatin for the mapjfx component</description>
     <url>http://www.sothawo.com/projects/mapjfx-demo</url>
@@ -28,7 +28,7 @@
         <connection>scm:git:git@github.com:sothawo/mapjfx-demo.git</connection>
         <developerConnection>scm:git:git@github.com:sothawo/mapjfx-demo.git</developerConnection>
         <url>git@github.com:sothawo/mapjfx-demo.git</url>
-        <tag>HEAD</tag>
+        <tag>mapjfx-demo-1.6.2</tag>
     </scm>
 
     <properties>
