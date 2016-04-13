@@ -248,7 +248,7 @@ public class Controller {
             offlineCache.setCacheDirectory(cacheDir);
             offlineCache.setActive(true);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("could not activate offline cache", e);
         }
 
         // set the custom css file for the MapView
