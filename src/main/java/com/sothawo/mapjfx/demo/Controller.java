@@ -23,6 +23,7 @@ import com.sothawo.mapjfx.MapLabel;
 import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
 import com.sothawo.mapjfx.Marker;
+import com.sothawo.mapjfx.offline.OfflineCache;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -235,6 +236,11 @@ public class Controller {
      */
     public void initialize() {
         logger.trace("begin initialize");
+
+        // init MapView-Cache
+        final OfflineCache offlineCache = mapView.getOfflineCache();
+        offlineCache.setCacheDirectory("tmpdata/cache");
+        offlineCache.setActive(true);
 
         // set the custom css file for the MapView
         mapView.setCustomMapviewCssURL(getClass().getResource("/custom_mapview.css"));
