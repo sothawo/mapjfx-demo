@@ -40,13 +40,26 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
 
-### 1.7.2-SNAPSHOT
+### 1.7.4-SNAPSHOT
 
 current development version
 
+### 1.7.3
+
+* using mapjfx 1.7.3
+* removed MapQuest see [ol issue #5484](https://github.com/openlayers/ol3/issues/5484)
+
+### 1.7.2
+
+* using mapjfx 1.7.2
+
+### 1.7.1
+
+* using mapjfx 1.7.1
+
 ### 1.7.0
 
-** using offline cache
+* using offline cache
 
 ### 1.6.0-SNAPSHOT
 

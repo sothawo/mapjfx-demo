@@ -154,10 +154,6 @@ public class Controller {
     @FXML
     private RadioButton radioMsOSM;
 
-    /** RadioButton for MapStyle MapQuest */
-    @FXML
-    private RadioButton radioMsMQ;
-
     /** RadioButton for MapStyle Bing Road */
     @FXML
     private RadioButton radioMsBR;
@@ -304,8 +300,6 @@ public class Controller {
             MapType mapType = MapType.OSM;
             if (newValue == radioMsOSM) {
                 mapType = MapType.OSM;
-            } else if (newValue == radioMsMQ) {
-                mapType = MapType.MAPQUEST_OSM;
             } else if (newValue == radioMsBR) {
                 mapType = MapType.BINGMAPS_ROAD;
             } else if (newValue == radioMsBA) {
