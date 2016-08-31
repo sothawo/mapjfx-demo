@@ -16,13 +16,15 @@
 package com.sothawo.mapjfx.demo;
 
 import com.sothawo.mapjfx.Coordinate;
-import com.sothawo.mapjfx.CoordinateEvent;
 import com.sothawo.mapjfx.CoordinateLine;
 import com.sothawo.mapjfx.Extent;
 import com.sothawo.mapjfx.MapLabel;
 import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
 import com.sothawo.mapjfx.Marker;
+import com.sothawo.mapjfx.event.MapLabelEvent;
+import com.sothawo.mapjfx.event.MapViewEvent;
+import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -114,24 +116,24 @@ public class Controller {
     @FXML
     private TitledPane optionsLocations;
 
-    @FXML
     /** button to set the map's center */
+    @FXML
     private Button buttonKaHarbour;
 
-    @FXML
     /** button to set the map's center */
+    @FXML
     private Button buttonKaCastle;
 
-    @FXML
     /** button to set the map's center */
+    @FXML
     private Button buttonKaStation;
 
-    @FXML
     /** button to set the map's center */
+    @FXML
     private Button buttonKaSoccer;
 
+    /** button to set the map's extent. */
     @FXML
-    /** button to set the map's extent */
     private Button buttonAllLocations;
 
     /** for editing the animation duration */
@@ -149,6 +151,10 @@ public class Controller {
     /** Label to display the current zoom */
     @FXML
     private Label labelZoom;
+
+    /** label to display the last event. */
+    @FXML
+    private Label labelEvent;
 
     /** RadioButton for MapStyle OSM */
     @FXML
@@ -311,7 +317,7 @@ public class Controller {
         mapTypeGroup.selectToggle(radioMsOSM);
 
         // add an event handler for singleclicks, set the click marker to the new position when it's visible
-        mapView.addEventHandler(CoordinateEvent.MAP_CLICKED, event -> {
+        mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
             event.consume();
             if (markerClick.getVisible()) {
                 boolean needToAddMarker = (null == markerClick.getPosition());
@@ -321,7 +327,17 @@ public class Controller {
                     mapView.addMarker(markerClick);
                 }
             }
+            labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
         });
+        mapView.addEventHandler(MarkerEvent.MARKER_CLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
+        });
+        mapView.addEventHandler(MapLabelEvent.MAPLABEL_CLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: label clicked: " + event.getMapLabel().getText());
+        });
+
         logger.trace("map handlers initialized");
 
         // add the graphics to the checkboxes

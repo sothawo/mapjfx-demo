@@ -41,6 +41,7 @@
             <children>
                 <Label fx:id="labelCenter" text="Center: "/>
                 <Label fx:id="labelZoom" text="Zoom: "/>
+                <Label fx:id="labelEvent" text="Event: " />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
