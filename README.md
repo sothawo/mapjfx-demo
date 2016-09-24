@@ -40,7 +40,9 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
 
-### 1.7.4-SNAPSHOT
+### 1.8.1
+
+* using mapjfx 1.8.1
 
 current development version
 
