@@ -22,6 +22,7 @@ import com.sothawo.mapjfx.MapLabel;
 import com.sothawo.mapjfx.MapType;
 import com.sothawo.mapjfx.MapView;
 import com.sothawo.mapjfx.Marker;
+import com.sothawo.mapjfx.WMSParam;
 import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
@@ -168,6 +169,14 @@ public class Controller {
     @FXML
     private RadioButton radioMsBA;
 
+    /** RadioButton for MapStyle WSM GIS Landsat. */
+    @FXML
+    private RadioButton radioMsWMSGisLandsat;
+
+    /** RadioButton for MapStyle WMS World Food Programme admin boundaries. */
+    @FXML
+    private RadioButton radioMsWMSWFPAdminBoundaries;
+
     /** ToggleGroup for the MapStyle radios */
     @FXML
     private ToggleGroup mapTypeGroup;
@@ -203,6 +212,17 @@ public class Controller {
     /** Check button for first track */
     @FXML
     private CheckBox checkTrackCyan;
+
+    /** params for the first WMS server. */
+    private WMSParam wmsParamGisLandsat = new WMSParam()
+            .setUrl("http://irs.gis-lab.info/?")
+            .addParam("layers", "landsat")
+            .addParam("REQUEST", "GetTile");
+
+    /** params for the second WMS server. */
+    private WMSParam wmsParamWFPAdminBoundaries = new WMSParam()
+            .setUrl("http://geonode.wfp.org:80/geoserver/ows")
+            .addParam("layers", "geonode:admin_2_gaul_2015");
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
@@ -248,7 +268,7 @@ public class Controller {
         try {
             Files.createDirectories(Paths.get(cacheDir));
             offlineCache.setCacheDirectory(cacheDir);
-            offlineCache.setActive(true);
+//            offlineCache.setActive(true);
         } catch (IOException e) {
             logger.warn("could not activate offline cache", e);
         }
@@ -310,6 +330,18 @@ public class Controller {
                 mapType = MapType.BINGMAPS_ROAD;
             } else if (newValue == radioMsBA) {
                 mapType = MapType.BINGMAPS_AERIAL;
+            } else if (newValue == radioMsWMSGisLandsat) {
+                mapView.setWMSParam(wmsParamGisLandsat);
+                if (oldValue == radioMsWMSWFPAdminBoundaries) {
+                    mapView.setMapType(MapType.OSM);
+                }
+                mapType = MapType.WMS;
+            } else if (newValue == radioMsWMSWFPAdminBoundaries) {
+                mapView.setWMSParam(wmsParamWFPAdminBoundaries);
+                if (oldValue == radioMsWMSGisLandsat) {
+                    mapView.setMapType(MapType.OSM);
+                }
+                mapType = MapType.WMS;
             }
             mapView.setBingMapsApiKey(bingMapsApiKey.getText());
             mapView.setMapType(mapType);
