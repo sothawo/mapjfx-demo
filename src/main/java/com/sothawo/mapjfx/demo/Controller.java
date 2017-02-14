@@ -361,13 +361,25 @@ public class Controller {
             }
             labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
         });
+        mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: map right clicked at: " + event.getCoordinate());
+        });
         mapView.addEventHandler(MarkerEvent.MARKER_CLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
         });
+        mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: marker right clicked: " + event.getMarker().getId());
+        });
         mapView.addEventHandler(MapLabelEvent.MAPLABEL_CLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: label clicked: " + event.getMapLabel().getText());
+        });
+        mapView.addEventHandler(MapLabelEvent.MAPLABEL_RIGHTCLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: label right clicked: " + event.getMapLabel().getText());
         });
 
         logger.trace("map handlers initialized");
