@@ -348,41 +348,8 @@ public class Controller {
         });
         mapTypeGroup.selectToggle(radioMsOSM);
 
-        // add an event handler for singleclicks, set the click marker to the new position when it's visible
-        mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
-            event.consume();
-            if (markerClick.getVisible()) {
-                boolean needToAddMarker = (null == markerClick.getPosition());
-                markerClick.setPosition(event.getCoordinate());
-                if (needToAddMarker) {
-                    // adding can only be done after coordinate is set
-                    mapView.addMarker(markerClick);
-                }
-            }
-            labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
-        });
-        mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
-            event.consume();
-            labelEvent.setText("Event: map right clicked at: " + event.getCoordinate());
-        });
-        mapView.addEventHandler(MarkerEvent.MARKER_CLICKED, event -> {
-            event.consume();
-            labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
-        });
-        mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
-            event.consume();
-            labelEvent.setText("Event: marker right clicked: " + event.getMarker().getId());
-        });
-        mapView.addEventHandler(MapLabelEvent.MAPLABEL_CLICKED, event -> {
-            event.consume();
-            labelEvent.setText("Event: label clicked: " + event.getMapLabel().getText());
-        });
-        mapView.addEventHandler(MapLabelEvent.MAPLABEL_RIGHTCLICKED, event -> {
-            event.consume();
-            labelEvent.setText("Event: label right clicked: " + event.getMapLabel().getText());
-        });
+        setupEventHandlers();
 
-        logger.trace("map handlers initialized");
 
         // add the graphics to the checkboxes
         checkKaHarbourMarker.setGraphic(
@@ -426,6 +393,55 @@ public class Controller {
         logger.trace("start map initialization");
         mapView.initialize();
         logger.debug("initialization finished");
+    }
+
+    /**
+     * initializes the event handlers.s
+     */
+    private void setupEventHandlers() {
+        // add an event handler for singleclicks, set the click marker to the new position when it's visible
+        mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
+            event.consume();
+            if (markerClick.getVisible()) {
+                boolean needToAddMarker = (null == markerClick.getPosition());
+                markerClick.setPosition(event.getCoordinate());
+                if (needToAddMarker) {
+                    // adding can only be done after coordinate is set
+                    mapView.addMarker(markerClick);
+                }
+            }
+            labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
+        });
+
+        // add an event handler for MapViewEvent#MAP_EXTENT and set the extnet in the map
+        mapView.addEventHandler(MapViewEvent.MAP_EXTENT, event -> {
+            event.consume();
+            mapView.setExtent(event.getExtent());
+        });
+
+        // all the other events just go to the log
+        mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: map right clicked at: " + event.getCoordinate());
+        });
+        mapView.addEventHandler(MarkerEvent.MARKER_CLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: marker clicked: " + event.getMarker().getId());
+        });
+        mapView.addEventHandler(MarkerEvent.MARKER_RIGHTCLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: marker right clicked: " + event.getMarker().getId());
+        });
+        mapView.addEventHandler(MapLabelEvent.MAPLABEL_CLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: label clicked: " + event.getMapLabel().getText());
+        });
+        mapView.addEventHandler(MapLabelEvent.MAPLABEL_RIGHTCLICKED, event -> {
+            event.consume();
+            labelEvent.setText("Event: label right clicked: " + event.getMapLabel().getText());
+        });
+
+        logger.trace("map handlers initialized");
     }
 
     /**
