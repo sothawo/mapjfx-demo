@@ -268,7 +268,7 @@ public class Controller {
         try {
             Files.createDirectories(Paths.get(cacheDir));
             offlineCache.setCacheDirectory(cacheDir);
-//            offlineCache.setActive(true);
+            offlineCache.setActive(true);
         } catch (IOException e) {
             logger.warn("could not activate offline cache", e);
         }
