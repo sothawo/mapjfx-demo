@@ -42,7 +42,7 @@
         <dependency>
             <groupId>com.sothawo</groupId>
             <artifactId>mapjfx</artifactId>
-            <version>1.12.1</version>
+            <version>1.12.2</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
