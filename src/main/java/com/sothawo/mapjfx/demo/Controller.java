@@ -264,14 +264,14 @@ public class Controller {
         // init MapView-Cache
         final OfflineCache offlineCache = mapView.getOfflineCache();
         final String cacheDir = System.getProperty("java.io.tmpdir") + "/mapjfx-cache";
-        logger.info("using dir for cache: " + cacheDir);
-        try {
-            Files.createDirectories(Paths.get(cacheDir));
-            offlineCache.setCacheDirectory(cacheDir);
-            offlineCache.setActive(true);
-        } catch (IOException e) {
-            logger.warn("could not activate offline cache", e);
-        }
+//        logger.info("using dir for cache: " + cacheDir);
+//        try {
+//            Files.createDirectories(Paths.get(cacheDir));
+//            offlineCache.setCacheDirectory(cacheDir);
+//            offlineCache.setActive(true);
+//        } catch (IOException e) {
+//            logger.warn("could not activate offline cache", e);
+//        }
 
         // set the custom css file for the MapView
         mapView.setCustomMapviewCssURL(getClass().getResource("/custom_mapview.css"));
