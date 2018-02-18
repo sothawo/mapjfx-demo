@@ -161,6 +161,10 @@ public class Controller {
     @FXML
     private RadioButton radioMsOSM;
 
+    /** RadioButton for MapStyle Stamen Watercolor */
+    @FXML
+    private RadioButton radioMsSTW;
+
     /** RadioButton for MapStyle Bing Road */
     @FXML
     private RadioButton radioMsBR;
@@ -326,6 +330,8 @@ public class Controller {
             MapType mapType = MapType.OSM;
             if (newValue == radioMsOSM) {
                 mapType = MapType.OSM;
+            } else if (newValue == radioMsSTW) {
+                mapType = MapType.STAMEN_WC;
             } else if (newValue == radioMsBR) {
                 mapType = MapType.BINGMAPS_ROAD;
             } else if (newValue == radioMsBA) {
