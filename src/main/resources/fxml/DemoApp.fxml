@@ -74,6 +74,7 @@
                             </fx:define>
                             <children>
                                 <RadioButton fx:id="radioMsOSM" text="OSM" toggleGroup="$mapTypeGroup"/>
+                                <RadioButton fx:id="radioMsSTW" text="Stamen Watercolor" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsBR" text="Bing Road" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsBA" text="Bing Aerial" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsWMSGisLandsat" text="WMS GIS Landsat"
