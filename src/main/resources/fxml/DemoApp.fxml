@@ -42,6 +42,7 @@
         <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="labelCenter" text="Center: "/>
+                <Label fx:id="labelExtent" text="Extent: "/>
                 <Label fx:id="labelZoom" text="Zoom: "/>
                 <Label fx:id="labelEvent" text="Event: "/>
             </children>
