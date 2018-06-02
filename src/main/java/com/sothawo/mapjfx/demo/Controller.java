@@ -149,6 +149,10 @@ public class Controller {
     @FXML
     private Label labelCenter;
 
+    /** Label to display the current extent */
+    @FXML
+    private Label labelExtent;
+
     /** Label to display the current zoom */
     @FXML
     private Label labelZoom;
@@ -419,10 +423,16 @@ public class Controller {
             labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
         });
 
-        // add an event handler for MapViewEvent#MAP_EXTENT and set the extnet in the map
+        // add an event handler for MapViewEvent#MAP_EXTENT and set the extent in the map
         mapView.addEventHandler(MapViewEvent.MAP_EXTENT, event -> {
             event.consume();
             mapView.setExtent(event.getExtent());
+        });
+
+        // add an event handler for extent changes and display them in the status label
+        mapView.addEventHandler(MapViewEvent.MAP_BOUNDING_EXTENT, event -> {
+            event.consume();
+            labelExtent.setText(event.getExtent().toString());
         });
 
         // all the other events just go to the log
