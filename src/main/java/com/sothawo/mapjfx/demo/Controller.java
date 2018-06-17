@@ -435,7 +435,6 @@ public class Controller {
             labelExtent.setText(event.getExtent().toString());
         });
 
-        // all the other events just go to the log
         mapView.addEventHandler(MapViewEvent.MAP_RIGHTCLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: map right clicked at: " + event.getCoordinate());
@@ -455,6 +454,10 @@ public class Controller {
         mapView.addEventHandler(MapLabelEvent.MAPLABEL_RIGHTCLICKED, event -> {
             event.consume();
             labelEvent.setText("Event: label right clicked: " + event.getMapLabel().getText());
+        });
+
+        mapView.addEventHandler(MapViewEvent.MAP_POINTER_MOVED, event -> {
+            logger.debug("pointer moved to " + event.getCoordinate());
         });
 
         logger.trace("map handlers initialized");

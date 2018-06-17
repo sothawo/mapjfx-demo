@@ -39,10 +39,15 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+###
+
+* log MAP_POINTER_MOVED event
+* use mapjfx 1.18.0-SNAPSHOT
+
 ### 1.17.0
 
 * display bounding extent event
-* use mapjfx 1.17.0-SNAPSHOT
+* use mapjfx 1.17.0
 
 ### 1.16.0
 
