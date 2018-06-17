@@ -41,6 +41,8 @@ the version of this artifact is always the same as the one of the integrated map
 
 ###
 
+### 1.18.0
+
 * log MAP_POINTER_MOVED event
 * use mapjfx 1.18.0-SNAPSHOT
 
