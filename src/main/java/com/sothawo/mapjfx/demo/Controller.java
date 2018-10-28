@@ -15,47 +15,24 @@
 */
 package com.sothawo.mapjfx.demo;
 
-import com.sothawo.mapjfx.Coordinate;
-import com.sothawo.mapjfx.CoordinateLine;
-import com.sothawo.mapjfx.Extent;
-import com.sothawo.mapjfx.MapLabel;
-import com.sothawo.mapjfx.MapType;
-import com.sothawo.mapjfx.MapView;
+import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.Marker;
-import com.sothawo.mapjfx.WMSParam;
-import com.sothawo.mapjfx.event.MapLabelEvent;
-import com.sothawo.mapjfx.event.MapViewEvent;
-import com.sothawo.mapjfx.event.MarkerEvent;
+import com.sothawo.mapjfx.event.*;
 import com.sothawo.mapjfx.offline.OfflineCache;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 /**
  * Controller for the FXML defined code.
@@ -185,6 +162,10 @@ public class Controller {
     @FXML
     private RadioButton radioMsWMSWFPAdminBoundaries;
 
+    /** RadioButton for MapStyle XYZ */
+    @FXML
+    private RadioButton radioMsXYZ;
+
     /** ToggleGroup for the MapStyle radios */
     @FXML
     private ToggleGroup mapTypeGroup;
@@ -231,6 +212,11 @@ public class Controller {
     private WMSParam wmsParamWFPAdminBoundaries = new WMSParam()
             .setUrl("http://geonode.wfp.org:80/geoserver/ows")
             .addParam("layers", "geonode:admin_2_gaul_2015");
+
+    private XYZParam xyzParams = new XYZParam()
+            .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
+            .withAttributions(
+                    "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
@@ -352,6 +338,9 @@ public class Controller {
                     mapView.setMapType(MapType.OSM);
                 }
                 mapType = MapType.WMS;
+            } else if (newValue == radioMsXYZ) {
+                mapView.setXYZParam(xyzParams);
+                mapType = MapType.XYZ;
             }
             mapView.setBingMapsApiKey(bingMapsApiKey.getText());
             mapView.setMapType(mapType);

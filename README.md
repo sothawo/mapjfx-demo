@@ -41,6 +41,8 @@ the version of this artifact is always the same as the one of the integrated map
 
 ###
 
+* add XYZ map source (contribution from [Erik Jaehne](https://github.com/s3erjaeh))
+
 ### 1.18.0
 
 * log MAP_POINTER_MOVED event
