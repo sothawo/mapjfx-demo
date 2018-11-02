@@ -34,12 +34,13 @@ or all in one:
 
 _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
-
 ## version history
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
 ###
+
+* switch to OpenJDK 11 and OpenJFX 11
 
 ### 1.19.0
 
