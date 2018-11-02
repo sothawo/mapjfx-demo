@@ -41,6 +41,10 @@ the version of this artifact is always the same as the one of the integrated map
 
 ###
 
+### 1.19.1
+
+* no code changes, branch adaptions for branches 1.x and 2.x
+
 ### 1.19.0
 
 * add XYZ map source (contribution from [Erik Jaehne](https://github.com/s3erjaeh))
