@@ -41,6 +41,7 @@ the version of this artifact is always the same as the one of the integrated map
 ### 2.1.0
 
 * use mapjfx 2.1.0
+
 ### 2.0.0
 
 * switch to OpenJDK 11 and OpenJFX 11
