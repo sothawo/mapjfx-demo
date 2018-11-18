@@ -101,12 +101,13 @@
                         </VBox>
                     </content>
                 </TitledPane>
-                <TitledPane fx:id="optionsTracks" animated="true" text="tracks">
+                <TitledPane fx:id="optionsTracks" animated="true" text="tracks and polygons">
                     <content>
                         <VBox spacing="10.0">
                             <children>
                                 <CheckBox fx:id="checkTrackMagenta" text="magenta track" maxWidth="Infinity"/>
                                 <CheckBox fx:id="checkTrackCyan" text="cyan track" maxWidth="Infinity"/>
+                                <CheckBox fx:id="checkDrawPolygon" text="draw a polygon" maxWidth="Infinity"/>
                             </children>
                         </VBox>
                     </content>
