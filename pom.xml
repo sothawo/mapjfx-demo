@@ -36,13 +36,16 @@
         <maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
         <appassembler.directory>mapjfx-demo</appassembler.directory>
+
+        <mapjfx.version>${project.version}</mapjfx.version>
+
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.sothawo</groupId>
             <artifactId>mapjfx</artifactId>
-            <version>${project.version}</version>
+            <version>${mapjfx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
