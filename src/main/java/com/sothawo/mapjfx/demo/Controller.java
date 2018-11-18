@@ -31,7 +31,7 @@ import org.slf4j.*;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -201,6 +201,12 @@ public class Controller {
     /** Check button for first track */
     @FXML
     private CheckBox checkTrackCyan;
+
+    /** Coordinateline for polygon drawing. */
+    private CoordinateLine polygonLine;
+    /** Check Button for polygon drawing mode. */
+    @FXML
+    private CheckBox checkDrawPolygon;
 
     /** params for the first WMS server. */
     private WMSParam wmsParamGisLandsat = new WMSParam()
@@ -388,6 +394,16 @@ public class Controller {
         trackMagenta.visibleProperty().addListener(trackVisibleListener);
         trackCyan.visibleProperty().addListener(trackVisibleListener);
 
+        // add the polygon check handler
+        ChangeListener<Boolean> polygonListener =
+                (observable, oldValue, newValue) -> {
+                    if (!newValue && polygonLine != null) {
+                        mapView.removeCoordinateLine(polygonLine);
+                        polygonLine = null;
+                    }
+                };
+        checkDrawPolygon.selectedProperty().addListener(polygonListener);
+
         // finally initialize the map view
         logger.trace("start map initialization");
         mapView.initialize();
@@ -395,12 +411,16 @@ public class Controller {
     }
 
     /**
-     * initializes the event handlers.s
+     * initializes the event handlers.
      */
     private void setupEventHandlers() {
         // add an event handler for singleclicks, set the click marker to the new position when it's visible
         mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
             event.consume();
+            labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
+            if (checkDrawPolygon.isSelected()) {
+                handlePolygonClick(event);
+            }
             if (markerClick.getVisible()) {
                 boolean needToAddMarker = (null == markerClick.getPosition());
                 markerClick.setPosition(event.getCoordinate());
@@ -409,7 +429,6 @@ public class Controller {
                     mapView.addMarker(markerClick);
                 }
             }
-            labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
         });
 
         // add an event handler for MapViewEvent#MAP_EXTENT and set the extent in the map
@@ -450,6 +469,28 @@ public class Controller {
         });
 
         logger.trace("map handlers initialized");
+    }
+
+    /**
+     * shows a new polygon with the coordinate from the added.
+     *
+     * @param event
+     *         event with coordinates
+     */
+    private void handlePolygonClick(MapViewEvent event) {
+        final List<Coordinate> coordinates = new ArrayList<>();
+        if (polygonLine != null) {
+            polygonLine.getCoordinateStream().forEach(coordinates::add);
+            mapView.removeCoordinateLine(polygonLine);
+            polygonLine = null;
+        }
+        coordinates.add(event.getCoordinate());
+        polygonLine = new CoordinateLine(coordinates)
+                .setColor(Color.DODGERBLUE)
+                .setFillColor(Color.web("lawngreen", 0.4))
+                .setClosed(true);
+        mapView.addCoordinateLine(polygonLine);
+        polygonLine.setVisible(true);
     }
 
     /**
