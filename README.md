@@ -39,6 +39,11 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 1.21.0
+
+* add polygon drawing code
+* use mapjfx 1.21.0
+
 ### 1.20.1
 
 * use mapjfx 1.20.1
