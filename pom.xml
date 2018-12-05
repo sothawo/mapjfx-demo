@@ -37,7 +37,8 @@
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
         <appassembler.directory>mapjfx-demo</appassembler.directory>
 
-        <mapjfx.version>${project.version}</mapjfx.version>
+        <!--<mapjfx.version>${project.version}</mapjfx.version>-->
+        <mapjfx.version>2.3.0</mapjfx.version>
         <openjfx.version>11</openjfx.version>
 
     </properties>
