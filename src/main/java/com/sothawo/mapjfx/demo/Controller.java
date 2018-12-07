@@ -15,8 +15,8 @@
 */
 package com.sothawo.mapjfx.demo;
 
-import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.Marker;
+import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.*;
 import com.sothawo.mapjfx.offline.OfflineCache;
 import javafx.beans.binding.Bindings;
@@ -40,7 +40,6 @@ import java.util.stream.*;
  * @author P.J. Meisch (pj.meisch@sothawo.com).
  */
 public class Controller {
-// ------------------------------ FIELDS ------------------------------
 
     /** logger for the class. */
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
@@ -71,7 +70,7 @@ public class Controller {
     private final MapLabel labelClick;
 
     @FXML
-    /** button to set the map's zoom to 15*/
+    /** button to set the map's zoom. */
     private Button buttonZoom;
 
     /** the MapView containing the map */
@@ -224,8 +223,6 @@ public class Controller {
             .withAttributions(
                     "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public Controller() {
         // a couple of markers using the provided ones
         markerKaHarbour = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKarlsruheHarbour).setVisible(
@@ -253,12 +250,14 @@ public class Controller {
         markerClick.attachLabel(labelClick);
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     /**
-     * called after the fxml is loaded and all objects are created.
+     * called after the fxml is loaded and all objects are created. This is not called initialize any more,
+     * because we need to pass in the projection before initializing.
+     *
+     * @param projection
+     *         the projection to use in the map.
      */
-    public void initialize() {
+    public void initMapAndControls(Projection projection) {
         logger.trace("begin initialize");
 
         // init MapView-Cache
@@ -406,7 +405,7 @@ public class Controller {
 
         // finally initialize the map view
         logger.trace("start map initialization");
-        mapView.initialize();
+        mapView.initialize(projection);
         logger.debug("initialization finished");
     }
 

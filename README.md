@@ -24,9 +24,8 @@ More Information about the project can be found at [the sothawo website](http://
 ## building the program
 
 this project is built using mvn. The library jar is created by running `mvn package`. This creates as well an
-application directory structure in _target/mapjfx-demo_. You can copy this whole directory to a machine which has
-Java8 installed and start the program by using the scripts found in the _bin_ directory. Or start it on the machine
-where you did the build  using
+application directory structure in _target/mapjfx-demo_. You can copy this whole directory to a machine which has Java 11 installed and start the program by using the scripts found in the _bin_ directory. 
+Or start it on the machine where you did the build  using
 
 _(cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
@@ -37,6 +36,11 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 ## version history
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
+
+### 2.3.0
+
+* add code to handle wgs84 commandline parameter and set initial map projection
+* use mapjfx 2.3.0
 
 ### 2.2.0
 
