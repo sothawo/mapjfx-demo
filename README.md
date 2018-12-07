@@ -39,6 +39,11 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 1.22.0
+
+* add code to handle wgs84 commandline parameter and set initial map projection
+* use mapjfx 1.22.0
+
 ### 1.21.0
 
 * add polygon drawing code
