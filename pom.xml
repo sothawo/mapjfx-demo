@@ -3,7 +3,7 @@
 
     <groupId>com.sothawo</groupId>
     <artifactId>mapjfx-demo</artifactId>
-    <version>1.22.0</version>
+    <version>1.24.0</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>demo applicatin for the mapjfx component</description>
     <url>http://www.sothawo.com/projects/mapjfx-demo</url>
@@ -39,6 +39,7 @@
 
         <mapjfx.version>${project.version}</mapjfx.version>
 
+        <logback.version>1.2.3</logback.version>
     </properties>
 
     <dependencies>
@@ -48,19 +49,9 @@
             <version>${mapjfx.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>1.7.9</version>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.2</version>
+            <version>${logback.version}</version>
         </dependency>
         <!-- Test scope -->
         <dependency>

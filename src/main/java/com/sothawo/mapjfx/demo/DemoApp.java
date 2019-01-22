@@ -18,10 +18,11 @@ package com.sothawo.mapjfx.demo;
 import com.sothawo.mapjfx.Projection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.slf4j.*;
-import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Demo application for the mapjfx component.
@@ -31,13 +32,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 public class DemoApp extends Application {
 
     /** Logger for the class */
-    private static final Logger logger;
-
-    static {
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();
-        logger = LoggerFactory.getLogger(DemoApp.class);
-    }
+    private static final Logger logger = LoggerFactory.getLogger(DemoApp.class);
 
     public static void main(String[] args) {
         logger.trace("begin main");
