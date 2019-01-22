@@ -7,7 +7,7 @@ More Information about the project can be found at [the sothawo website](http://
 
 ## license
 
- Copyright 2014-2018 Peter-Josef Meisch (pj.meisch@sothawo.com)
+ Copyright 2014-2019 Peter-Josef Meisch (pj.meisch@sothawo.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -36,6 +36,14 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 ## version history
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
+
+### 2.5.0
+
+* use mapjfx 2.5.0
+
+### 2.4.0
+
+* slf4j and logback
 
 ### 2.3.0
 
