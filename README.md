@@ -39,9 +39,18 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 1.24.2
+
+* use mapjfx 1.24.2
+
+### 1.24.1
+
+* use mapjfx 1.24.1
+
 ### 1.24.0
 
 * use mapjfx 1.24.0
+
 ### 1.23.0
 
 * added slf4j/logback
