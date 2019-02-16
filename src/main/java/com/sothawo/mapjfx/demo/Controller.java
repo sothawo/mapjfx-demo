@@ -15,24 +15,51 @@
 */
 package com.sothawo.mapjfx.demo;
 
+import com.sothawo.mapjfx.Coordinate;
+import com.sothawo.mapjfx.CoordinateLine;
+import com.sothawo.mapjfx.Extent;
+import com.sothawo.mapjfx.MapLabel;
+import com.sothawo.mapjfx.MapType;
+import com.sothawo.mapjfx.MapView;
 import com.sothawo.mapjfx.Marker;
-import com.sothawo.mapjfx.*;
-import com.sothawo.mapjfx.event.*;
+import com.sothawo.mapjfx.Projection;
+import com.sothawo.mapjfx.WMSParam;
+import com.sothawo.mapjfx.XYZParam;
+import com.sothawo.mapjfx.event.MapLabelEvent;
+import com.sothawo.mapjfx.event.MapViewEvent;
+import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
+import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.slf4j.*;
+import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Controller for the FXML defined code.
@@ -416,14 +443,17 @@ public class Controller {
         // add an event handler for singleclicks, set the click marker to the new position when it's visible
         mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
             event.consume();
-            labelEvent.setText("Event: map clicked at: " + event.getCoordinate());
+            final Coordinate newPosition = event.getCoordinate();
+            labelEvent.setText("Event: map clicked at: " + newPosition);
             if (checkDrawPolygon.isSelected()) {
                 handlePolygonClick(event);
             }
             if (markerClick.getVisible()) {
-                boolean needToAddMarker = (null == markerClick.getPosition());
-                markerClick.setPosition(event.getCoordinate());
-                if (needToAddMarker) {
+                final Coordinate oldPosition = markerClick.getPosition();
+                if (oldPosition != null) {
+                    animateClickMarker(oldPosition, newPosition);
+                } else {
+                    markerClick.setPosition(newPosition);
                     // adding can only be done after coordinate is set
                     mapView.addMarker(markerClick);
                 }
@@ -468,6 +498,29 @@ public class Controller {
         });
 
         logger.trace("map handlers initialized");
+    }
+
+    private void animateClickMarker(Coordinate oldPosition, Coordinate newPosition) {
+        // animate the marker to the new position
+        final Transition transition = new Transition() {
+            private final Double oldPositionLongitude = oldPosition.getLongitude();
+            private final Double oldPositionLatitude = oldPosition.getLatitude();
+            private final double deltaLatitude = newPosition.getLatitude() - oldPositionLatitude;
+            private final double deltaLongitude = newPosition.getLongitude() - oldPositionLongitude;
+
+            {
+                setCycleDuration(Duration.seconds(1.0));
+                setOnFinished(evt -> markerClick.setPosition(newPosition));
+            }
+
+            @Override
+            protected void interpolate(double v) {
+                final double latitude = oldPosition.getLatitude() + v * deltaLatitude;
+                final double longitude = oldPosition.getLongitude() + v * deltaLongitude;
+                markerClick.setPosition(new Coordinate(latitude, longitude));
+            }
+        };
+        transition.play();
     }
 
     /**
