@@ -1,5 +1,5 @@
 /*
- Copyright 2015 Peter-Josef Meisch (pj.meisch@sothawo.com)
+ Copyright 2015-2019 Peter-Josef Meisch (pj.meisch@sothawo.com)
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -443,7 +443,7 @@ public class Controller {
         // add an event handler for singleclicks, set the click marker to the new position when it's visible
         mapView.addEventHandler(MapViewEvent.MAP_CLICKED, event -> {
             event.consume();
-            final Coordinate newPosition = event.getCoordinate();
+            final Coordinate newPosition = event.getCoordinate().normalize();
             labelEvent.setText("Event: map clicked at: " + newPosition);
             if (checkDrawPolygon.isSelected()) {
                 handlePolygonClick(event);
