@@ -37,6 +37,11 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 2.7.0
+
+* set interactive mode to true
+* use mapjfx 2.7.0
+
 ### 2.6.0
 
 * show normalized coordinate in status bar on map click 

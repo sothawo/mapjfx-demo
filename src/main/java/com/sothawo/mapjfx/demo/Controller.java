@@ -432,7 +432,7 @@ public class Controller {
 
         // finally initialize the map view
         logger.trace("start map initialization");
-        mapView.initialize(projection);
+        mapView.initialize(projection, true);
         logger.debug("initialization finished");
     }
 
