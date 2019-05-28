@@ -39,6 +39,11 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 1.26.1
+
+* use different WMS sample server
+* use mapjfx 1.26.1
+
 ### 1.26.0
 
 * set interactive mode to true
