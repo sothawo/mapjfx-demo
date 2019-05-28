@@ -78,11 +78,7 @@
                                 <RadioButton fx:id="radioMsSTW" text="Stamen Watercolor" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsBR" text="Bing Road" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsBA" text="Bing Aerial" toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsWMSGisLandsat" text="WMS GIS Landsat"
-                                             toggleGroup="$mapTypeGroup"/>
-                                <RadioButton fx:id="radioMsWMSWFPAdminBoundaries"
-                                             text="WMS World Food Programme admin boundaries"
-                                             toggleGroup="$mapTypeGroup"/>
+                                <RadioButton fx:id="radioMsWMS" text="WMS terrestris OSM" toggleGroup="$mapTypeGroup"/>
                                 <RadioButton fx:id="radioMsXYZ" text="XYZ source" toggleGroup="$mapTypeGroup"/>
                             </children>
                         </VBox>

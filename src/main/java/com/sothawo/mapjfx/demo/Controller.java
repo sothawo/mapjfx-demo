@@ -180,13 +180,9 @@ public class Controller {
     @FXML
     private RadioButton radioMsBA;
 
-    /** RadioButton for MapStyle WSM GIS Landsat. */
+    /** RadioButton for MapStyle WMS. */
     @FXML
-    private RadioButton radioMsWMSGisLandsat;
-
-    /** RadioButton for MapStyle WMS World Food Programme admin boundaries. */
-    @FXML
-    private RadioButton radioMsWMSWFPAdminBoundaries;
+    private RadioButton radioMsWMS;
 
     /** RadioButton for MapStyle XYZ */
     @FXML
@@ -234,16 +230,10 @@ public class Controller {
     @FXML
     private CheckBox checkDrawPolygon;
 
-    /** params for the first WMS server. */
-    private WMSParam wmsParamGisLandsat = new WMSParam()
-            .setUrl("http://irs.gis-lab.info/?")
-            .addParam("layers", "landsat")
-            .addParam("REQUEST", "GetTile");
-
-    /** params for the second WMS server. */
-    private WMSParam wmsParamWFPAdminBoundaries = new WMSParam()
-            .setUrl("http://geonode.wfp.org:80/geoserver/ows")
-            .addParam("layers", "geonode:admin_2_gaul_2015");
+    /** params for the WMS server. */
+    private WMSParam wmsParam = new WMSParam()
+            .setUrl("http://ows.terrestris.de/osm/service?")
+            .addParam("layers", "OSM-WMS");
 
     private XYZParam xyzParams = new XYZParam()
             .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
@@ -358,17 +348,8 @@ public class Controller {
                 mapType = MapType.BINGMAPS_ROAD;
             } else if (newValue == radioMsBA) {
                 mapType = MapType.BINGMAPS_AERIAL;
-            } else if (newValue == radioMsWMSGisLandsat) {
-                mapView.setWMSParam(wmsParamGisLandsat);
-                if (oldValue == radioMsWMSWFPAdminBoundaries) {
-                    mapView.setMapType(MapType.OSM);
-                }
-                mapType = MapType.WMS;
-            } else if (newValue == radioMsWMSWFPAdminBoundaries) {
-                mapView.setWMSParam(wmsParamWFPAdminBoundaries);
-                if (oldValue == radioMsWMSGisLandsat) {
-                    mapView.setMapType(MapType.OSM);
-                }
+            } else if (newValue == radioMsWMS) {
+                mapView.setWMSParam(wmsParam);
                 mapType = MapType.WMS;
             } else if (newValue == radioMsXYZ) {
                 mapView.setXYZParam(xyzParams);
@@ -380,7 +361,6 @@ public class Controller {
         mapTypeGroup.selectToggle(radioMsOSM);
 
         setupEventHandlers();
-
 
         // add the graphics to the checkboxes
         checkKaHarbourMarker.setGraphic(
