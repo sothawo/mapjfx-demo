@@ -15,16 +15,7 @@
 */
 package com.sothawo.mapjfx.demo;
 
-import com.sothawo.mapjfx.Coordinate;
-import com.sothawo.mapjfx.CoordinateLine;
-import com.sothawo.mapjfx.Extent;
-import com.sothawo.mapjfx.MapLabel;
-import com.sothawo.mapjfx.MapType;
-import com.sothawo.mapjfx.MapView;
-import com.sothawo.mapjfx.Marker;
-import com.sothawo.mapjfx.Projection;
-import com.sothawo.mapjfx.WMSParam;
-import com.sothawo.mapjfx.XYZParam;
+import com.sothawo.mapjfx.*;
 import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
@@ -412,7 +403,10 @@ public class Controller {
 
         // finally initialize the map view
         logger.trace("start map initialization");
-        mapView.initialize(projection, true);
+        mapView.initialize(Configuration.builder()
+            .projection(projection)
+            .showZoomControls(false)
+            .build());
         logger.debug("initialization finished");
     }
 
