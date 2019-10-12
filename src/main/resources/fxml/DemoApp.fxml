@@ -116,6 +116,7 @@
                                 <TextField fx:id="animationDuration" prefWidth="120.0" promptText="milliseconds"/>
                                 <Label text="Bing Maps API-Key"/>
                                 <TextField fx:id="bingMapsApiKey" prefWidth="120.0" promptText="API-Key"/>
+                                <CheckBox fx:id="checkConstrainGermany" text="constrain to Germany" maxWidth="Infinity"/>
                             </children>
                         </VBox>
                     </content>
