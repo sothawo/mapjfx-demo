@@ -68,8 +68,13 @@ public class Controller {
     private static final Coordinate coordKarlsruheStation = new Coordinate(48.993284, 8.402186);
     private static final Coordinate coordKarlsruheSoccer = new Coordinate(49.020035, 8.412975);
     private static final Coordinate coordKarlsruheUniversity = new Coordinate(49.011809, 8.413639);
-    private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle,
-            coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
+    private static final Extent extentAllLocations = Extent.forCoordinates(coordKarlsruheCastle, coordKarlsruheHarbour, coordKarlsruheStation, coordKarlsruheSoccer);
+
+    private static final Coordinate coordGermanyNorth = new Coordinate(55.05863889, 8.417527778);
+    private static final Coordinate coordGermanySouth = new Coordinate(47.27166667, 10.17405556);
+    private static final Coordinate coordGermanyWest = new Coordinate(51.0525, 5.866944444);
+    private static final Coordinate coordGermanyEast = new Coordinate(51.27277778, 15.04361111);
+    private static final Extent extentGermany = Extent.forCoordinates(coordGermanyNorth, coordGermanySouth, coordGermanyWest, coordGermanyEast);
 
     /** default zoom value. */
     private static final int ZOOM_DEFAULT = 14;
@@ -221,30 +226,34 @@ public class Controller {
     @FXML
     private CheckBox checkDrawPolygon;
 
+    /** Check Button for constraining th extent. */
+    @FXML
+    private CheckBox checkConstrainGermany;
+
     /** params for the WMS server. */
     private WMSParam wmsParam = new WMSParam()
-            .setUrl("http://ows.terrestris.de/osm/service?")
-            .addParam("layers", "OSM-WMS");
+        .setUrl("http://ows.terrestris.de/osm/service?")
+        .addParam("layers", "OSM-WMS");
 
     private XYZParam xyzParams = new XYZParam()
-            .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
-            .withAttributions(
-                    "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
+        .withUrl("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x})")
+        .withAttributions(
+            "'Tiles &copy; <a href=\"https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer\">ArcGIS</a>'");
 
     public Controller() {
         // a couple of markers using the provided ones
         markerKaHarbour = Marker.createProvided(Marker.Provided.BLUE).setPosition(coordKarlsruheHarbour).setVisible(
-                false);
+            false);
         markerKaCastle = Marker.createProvided(Marker.Provided.GREEN).setPosition(coordKarlsruheCastle).setVisible(
-                false);
+            false);
         markerKaStation =
-                Marker.createProvided(Marker.Provided.RED).setPosition(coordKarlsruheStation).setVisible(false);
+            Marker.createProvided(Marker.Provided.RED).setPosition(coordKarlsruheStation).setVisible(false);
         // no position for click marker yet
         markerClick = Marker.createProvided(Marker.Provided.ORANGE).setVisible(false);
 
         // a marker with a custom icon
         markerKaSoccer = new Marker(getClass().getResource("/ksc.png"), -20, -20).setPosition(coordKarlsruheSoccer)
-                .setVisible(false);
+            .setVisible(false);
 
         // the fix label, default style
         labelKaUniversity = new MapLabel("university").setPosition(coordKarlsruheUniversity).setVisible(true);
@@ -263,7 +272,7 @@ public class Controller {
      * because we need to pass in the projection before initializing.
      *
      * @param projection
-     *         the projection to use in the map.
+     *     the projection to use in the map.
      */
     public void initMapAndControls(Projection projection) {
         logger.trace("begin initialize");
@@ -355,15 +364,15 @@ public class Controller {
 
         // add the graphics to the checkboxes
         checkKaHarbourMarker.setGraphic(
-                new ImageView(new Image(markerKaHarbour.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+            new ImageView(new Image(markerKaHarbour.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkKaCastleMarker.setGraphic(
-                new ImageView(new Image(markerKaCastle.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+            new ImageView(new Image(markerKaCastle.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkKaStationMarker.setGraphic(
-                new ImageView(new Image(markerKaStation.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+            new ImageView(new Image(markerKaStation.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkKaSoccerMarker.setGraphic(
-                new ImageView(new Image(markerKaSoccer.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+            new ImageView(new Image(markerKaSoccer.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
         checkClickMarker.setGraphic(
-                new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
+            new ImageView(new Image(markerClick.getImageURL().toExternalForm(), 16.0, 16.0, true, true)));
 
         // bind the checkboxes to the markers visibility
         checkKaHarbourMarker.selectedProperty().bindBidirectional(markerKaHarbour.visibleProperty());
@@ -375,31 +384,40 @@ public class Controller {
 
         // load two coordinate lines
         trackMagenta = loadCoordinateLine(getClass().getResource("/M1.csv")).orElse(new CoordinateLine
-                ()).setColor(Color.MAGENTA);
+            ()).setColor(Color.MAGENTA);
         trackCyan = loadCoordinateLine(getClass().getResource("/M2.csv")).orElse(new CoordinateLine
-                ()).setColor(Color.CYAN).setWidth(7);
+            ()).setColor(Color.CYAN).setWidth(7);
         logger.trace("tracks loaded");
         checkTrackMagenta.selectedProperty().bindBidirectional(trackMagenta.visibleProperty());
         checkTrackCyan.selectedProperty().bindBidirectional(trackCyan.visibleProperty());
         logger.trace("tracks checks done");
         // get the extent of both tracks
         Extent tracksExtent = Extent.forCoordinates(
-                Stream.concat(trackMagenta.getCoordinateStream(), trackCyan.getCoordinateStream())
-                        .collect(Collectors.toList()));
+            Stream.concat(trackMagenta.getCoordinateStream(), trackCyan.getCoordinateStream())
+                .collect(Collectors.toList()));
         ChangeListener<Boolean> trackVisibleListener =
-                (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
+            (observable, oldValue, newValue) -> mapView.setExtent(tracksExtent);
         trackMagenta.visibleProperty().addListener(trackVisibleListener);
         trackCyan.visibleProperty().addListener(trackVisibleListener);
 
         // add the polygon check handler
         ChangeListener<Boolean> polygonListener =
-                (observable, oldValue, newValue) -> {
-                    if (!newValue && polygonLine != null) {
-                        mapView.removeCoordinateLine(polygonLine);
-                        polygonLine = null;
-                    }
-                };
+            (observable, oldValue, newValue) -> {
+                if (!newValue && polygonLine != null) {
+                    mapView.removeCoordinateLine(polygonLine);
+                    polygonLine = null;
+                }
+            };
         checkDrawPolygon.selectedProperty().addListener(polygonListener);
+
+        // add the constrain listener
+        checkConstrainGermany.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue) {
+                mapView.constrainExtent(extentGermany);
+            } else {
+                mapView.clearConstrainExtent();
+            }
+        }));
 
         // finally initialize the map view
         logger.trace("start map initialization");
@@ -501,7 +519,7 @@ public class Controller {
      * shows a new polygon with the coordinate from the added.
      *
      * @param event
-     *         event with coordinates
+     *     event with coordinates
      */
     private void handlePolygonClick(MapViewEvent event) {
         final List<Coordinate> coordinates = new ArrayList<>();
@@ -512,9 +530,9 @@ public class Controller {
         }
         coordinates.add(event.getCoordinate());
         polygonLine = new CoordinateLine(coordinates)
-                .setColor(Color.DODGERBLUE)
-                .setFillColor(Color.web("lawngreen", 0.4))
-                .setClosed(true);
+            .setColor(Color.DODGERBLUE)
+            .setFillColor(Color.web("lawngreen", 0.4))
+            .setClosed(true);
         mapView.addCoordinateLine(polygonLine);
         polygonLine.setVisible(true);
     }
@@ -523,7 +541,7 @@ public class Controller {
      * enables / disables the different controls
      *
      * @param flag
-     *         if true the controls are disabled
+     *     if true the controls are disabled
      */
     private void setControlsDisable(boolean flag) {
         topControls.setDisable(flag);
@@ -560,20 +578,20 @@ public class Controller {
      * load a coordinateLine from the given uri in lat;lon csv format
      *
      * @param url
-     *         url where to load from
+     *     url where to load from
      * @return optional CoordinateLine object
      * @throws java.lang.NullPointerException
-     *         if uri is null
+     *     if uri is null
      */
     private Optional<CoordinateLine> loadCoordinateLine(URL url) {
         try (
-                Stream<String> lines = new BufferedReader(
-                        new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).lines()
+            Stream<String> lines = new BufferedReader(
+                new InputStreamReader(url.openStream(), StandardCharsets.UTF_8)).lines()
         ) {
             return Optional.of(new CoordinateLine(
-                    lines.map(line -> line.split(";")).filter(array -> array.length == 2)
-                            .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
-                            .collect(Collectors.toList())));
+                lines.map(line -> line.split(";")).filter(array -> array.length == 2)
+                    .map(values -> new Coordinate(Double.valueOf(values[0]), Double.valueOf(values[1])))
+                    .collect(Collectors.toList())));
         } catch (IOException | NumberFormatException e) {
             logger.error("load {}", url, e);
         }
