@@ -168,13 +168,29 @@ public class Controller {
     @FXML
     private RadioButton radioMsSTW;
 
-    /** RadioButton for MapStyle Bing Road */
+    /** RadioButton for MapStyle Bing Roads */
     @FXML
     private RadioButton radioMsBR;
+
+    /** RadioButton for MapStyle Bing Roads - dark */
+    @FXML
+    private RadioButton radioMsCd;
+
+    /** RadioButton for MapStyle Bing Roads - grayscale */
+    @FXML
+    private RadioButton radioMsCg;
+
+    /** RadioButton for MapStyle Bing Roads - light */
+    @FXML
+    private RadioButton radioMsCl;
 
     /** RadioButton for MapStyle Bing Aerial */
     @FXML
     private RadioButton radioMsBA;
+
+    /** RadioButton for MapStyle Bing Aerial with Label*/
+    @FXML
+    private RadioButton radioMsBAwL;
 
     /** RadioButton for MapStyle WMS. */
     @FXML
@@ -342,12 +358,18 @@ public class Controller {
             MapType mapType = MapType.OSM;
             if (newValue == radioMsOSM) {
                 mapType = MapType.OSM;
-            } else if (newValue == radioMsSTW) {
-                mapType = MapType.STAMEN_WC;
             } else if (newValue == radioMsBR) {
                 mapType = MapType.BINGMAPS_ROAD;
+            } else if (newValue == radioMsCd) {
+                mapType = MapType.BINGMAPS_CANVAS_DARK;
+            } else if (newValue == radioMsCg) {
+                mapType = MapType.BINGMAPS_CANVAS_GRAY;
+            } else if (newValue == radioMsCl) {
+                mapType = MapType.BINGMAPS_CANVAS_LIGHT;
             } else if (newValue == radioMsBA) {
                 mapType = MapType.BINGMAPS_AERIAL;
+            } else if (newValue == radioMsBAwL) {
+                mapType = MapType.BINGMAPS_AERIAL_WITH_LABELS;
             } else if (newValue == radioMsWMS) {
                 mapView.setWMSParam(wmsParam);
                 mapType = MapType.WMS;
