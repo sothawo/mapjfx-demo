@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package com.sothawo.mapjfx.demo;
+package com.sothawo.mapjfxdemo;
 
 /**
  * Helper class needed when launching the app from IntelliJ.
