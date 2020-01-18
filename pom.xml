@@ -102,7 +102,7 @@
                     <programs>
                         <program>
                             <id>mapjfx-demo</id>
-                            <mainClass>com.sothawo.mapjfx.demo.DemoApp</mainClass>
+                            <mainClass>com.sothawo.mapjfxdemo.DemoApp</mainClass>
                         </program>
                     </programs>
                 </configuration>
