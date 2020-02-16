@@ -3,7 +3,7 @@
 
     <groupId>com.sothawo</groupId>
     <artifactId>mapjfx-demo</artifactId>
-    <version>1.31.0</version>
+    <version>1.31.1</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>demo applicatin for the mapjfx component</description>
     <url>http://www.sothawo.com/projects/mapjfx-demo</url>
@@ -37,7 +37,7 @@
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
         <appassembler.directory>mapjfx-demo</appassembler.directory>
 
-        <mapjfx.version>1.31.0</mapjfx.version>
+        <mapjfx.version>1.31.1</mapjfx.version>
 
         <logback.version>1.2.3</logback.version>
     </properties>
