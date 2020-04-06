@@ -20,6 +20,7 @@ import com.sothawo.mapjfx.event.MapLabelEvent;
 import com.sothawo.mapjfx.event.MapViewEvent;
 import com.sothawo.mapjfx.event.MarkerEvent;
 import com.sothawo.mapjfx.offline.OfflineCache;
+import javafx.animation.AnimationTimer;
 import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -188,7 +189,7 @@ public class Controller {
     @FXML
     private RadioButton radioMsBA;
 
-    /** RadioButton for MapStyle Bing Aerial with Label*/
+    /** RadioButton for MapStyle Bing Aerial with Label */
     @FXML
     private RadioButton radioMsBAwL;
 
@@ -448,6 +449,22 @@ public class Controller {
             .showZoomControls(false)
             .build());
         logger.debug("initialization finished");
+
+        long animationStart = System.nanoTime();
+        new AnimationTimer() {
+            @Override
+            public void handle(long nanoSecondsNow) {
+                if (markerKaSoccer.getVisible()) {
+                    // every 100ms, increase the rotation of the markerKaSoccer by 9 degrees, make a turn in 4 seconds
+                    long milliSecondsDelta = (nanoSecondsNow - animationStart) / 1_000_000;
+                    long numSteps = milliSecondsDelta / 100;
+                    int angle = (int) ((numSteps * 9) % 360);
+                    if (markerKaSoccer.getRotation() != angle) {
+                        markerKaSoccer.setRotation(angle);
+                    }
+                }
+            }
+        }.start();
     }
 
     /**
