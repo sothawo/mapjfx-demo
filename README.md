@@ -37,6 +37,13 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 2.14.0
+
+* MAPFX-80 - Marker rotation.
+* use mapjfx 2.14.0
+
+### 2.13.1
+
 * use mapjfx 2.13.1
 
 ### 2.12.0
