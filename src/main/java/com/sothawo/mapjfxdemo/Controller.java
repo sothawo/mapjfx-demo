@@ -93,6 +93,9 @@ public class Controller {
     private final MapLabel labelKaStation;
     private final MapLabel labelClick;
 
+    // a circle around the castle
+    private final MapCircle circleCastle;
+
     @FXML
     /** button to set the map's zoom. */
     private Button buttonZoom;
@@ -282,6 +285,8 @@ public class Controller {
         markerKaCastle.attachLabel(labelKaCastle);
         markerKaStation.attachLabel(labelKaStation);
         markerClick.attachLabel(labelClick);
+
+        circleCastle = new MapCircle(coordKarlsruheStation, 1_000).setVisible(true);
     }
 
     /**
@@ -609,6 +614,10 @@ public class Controller {
         // add the tracks
         mapView.addCoordinateLine(trackMagenta);
         mapView.addCoordinateLine(trackCyan);
+
+        // add the circle
+        mapView.addMapCircle(circleCastle);
+
         // now enable the controls
         setControlsDisable(false);
     }
