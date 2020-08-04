@@ -37,6 +37,12 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 2.15.0
+
+* add circle around the station
+* use mapjfx 2.15.0
+
+
 ### 2.14.0
 
 * MAPFX-80 - Marker rotation.
