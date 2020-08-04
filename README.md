@@ -39,14 +39,19 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
-### 1.31.2
+### 1.33.0
 
-* use mapjfx 1.31.2
+* add circle around the station
+* use mapjfx 1.33.0
 
 ### 1.32.0
 
 * MAPJFX-80 - Marker rotation.
 * use mapjfx 1.32.0
+
+### 1.31.2
+
+* use mapjfx 1.31.2
 
 ### 1.31.1
 
