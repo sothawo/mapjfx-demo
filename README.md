@@ -39,6 +39,10 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
+### 1.33.1
+
+* use mapjfx 1.33.1
+
 ### 1.33.0
 
 * add circle around the station
