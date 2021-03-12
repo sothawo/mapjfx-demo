@@ -39,8 +39,9 @@ _mvn package && (cd target/mapjfx-demo && ./bin/mapjfx-demo)_
 
 the version of this artifact is always the same as the one of the integrated mapjfx component.
 
-###
+### 1.33.3
 
+last version of branch 1.x
 use mapjfx 1.33.3
 
 ### 1.33.2
