@@ -3,7 +3,7 @@
 
     <groupId>com.sothawo</groupId>
     <artifactId>mapjfx-demo</artifactId>
-    <version>3.0.1</version>
+    <version>3.1.0</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>demo application for the mapjfx component</description>
     <url>http://www.sothawo.com/projects/mapjfx-demo</url>
@@ -37,8 +37,8 @@
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
         <appassembler.directory>mapjfx-demo</appassembler.directory>
 
-        <mapjfx.version>3.0.1</mapjfx.version>
-        <openjfx.version>15.0.1</openjfx.version>
+        <mapjfx.version>3.1.0</mapjfx.version>
+        <openjfx.version>17.0.0.1</openjfx.version>
 
         <slf4j.version>1.7.28</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -79,9 +79,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <release>15</release>
+                    <release>17</release>
                 </configuration>
             </plugin>
             <plugin>
