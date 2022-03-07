@@ -1,5 +1,8 @@
 # mapjfx-demo
 
+> **Note March 2022**: I started mapjfx in December 2014 as a side project. In these seven years I learned quite some things by developing and maintaining it. But my focus has shifted and I don't have the time anymore to take care of this project. So from **March 2022** on, mapjfx will be out of maintenance. I'll do no further development on it.
+
+
 a demo application showing the possibilites of the [mapjfx](http://www.sothawo.com/projects/mapjfx/) component. The
 application's scene is built using an fxml file.
 
